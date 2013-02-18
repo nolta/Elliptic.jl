@@ -26,3 +26,6 @@ using Elliptic
 
 # values from Abramowitz & Stegun, Table 17.6 (p616-618)
 @test_approx_eq_eps E(degrees2radians(20), sind(20)^2) 0.34825_492 1e-8
+
+# values from Abramowitz & Stegun, Table 17.9 (p625-626)
+@test_approx_eq_eps Pi(0.2, degrees2radians(30), sind(30)^2) 0.53896 1e-5

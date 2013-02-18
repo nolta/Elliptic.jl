@@ -1,6 +1,6 @@
 module Elliptic
 
-export E, F, K
+export E, F, K, Pi
 
 include("slatec.jl")
 
@@ -51,5 +51,18 @@ end
 K(x::Float32) = float32(K(float64(x)))
 K(x::Real) = K(float64(x))
 @vectorize_1arg Real K
+
+function Pi(n::Float64, phi::Float64, m::Float64)
+    if m < 0. || m > 1. throw(DomainError()) end
+    sinphi = sin(phi)
+    sinphi2 = sinphi^2
+    cosphi2 = 1. - sinphi2
+    y = 1. - m*sinphi2
+    drf,ierr1 = SLATEC.DRF(cosphi2, y, 1.)
+    drj,ierr2 = SLATEC.DRJ(cosphi2, y, 1., 1. - n*sinphi2)
+    @assert ierr1 == 0 && ierr2 == 0
+    sinphi*(drf + n*sinphi2*drj/3)
+end
+Pi(n::Real, phi::Real, m::Real) = Pi(float64(n), float64(phi), float64(m))
 
 end # module

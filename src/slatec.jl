@@ -1,6 +1,6 @@
 module SLATEC
 
-export DRD, DRF
+export DRC, DRD, DRF, DRJ
 
 const D1MACH1 = realmin(Float64)
 const D1MACH2 = realmax(Float64)
@@ -175,6 +175,169 @@ function DRD(X::Float64, Y::Float64, Z::Float64)
     ans = 3.0*SIGMA + POWER4*(1.0+S1+S2)/(MU*sqrt(MU))
 
     return ans, 0
+end
+
+#***BEGIN PROLOGUE  DRC
+#***PURPOSE  Calculate a double precision approximation to
+#             DRC(X,Y) = Integral from zero to infinity of
+#                              -1/2     -1
+#                    (1/2)(t+X)    (t+Y)  dt,
+#            where X is nonnegative and Y is positive.
+#***LIBRARY   SLATEC
+#***CATEGORY  C14
+#***TYPE      DOUBLE PRECISION (RC-S, DRC-D)
+#***KEYWORDS  DUPLICATION THEOREM, ELEMENTARY FUNCTIONS,
+#             ELLIPTIC INTEGRAL, TAYLOR SERIES
+#***AUTHOR  Carlson, B. C.
+#             Ames Laboratory-DOE
+#             Iowa State University
+#             Ames, IA  50011
+#           Notis, E. M.
+#             Ames Laboratory-DOE
+#             Iowa State University
+#             Ames, IA  50011
+#           Pexton, R. L.
+#             Lawrence Livermore National Laboratory
+#             Livermore, CA  94550
+
+function DRC(X::Float64, Y::Float64)
+
+    const ERRTOL = (D1MACH3/16.0)^(1.0/6.0)
+    const LOLIM  = 5.0 * D1MACH1
+    const UPLIM  = D1MACH2 / 5.0
+    const C1 = 1.0/7.0
+    const C2 = 9.0/22.0
+
+    ans = 0.0
+    if X < 0.0 || Y <= 0.0
+        return ans, 1
+    end
+
+    if max(X,Y) > UPLIM
+        return ans, 3
+    end
+
+    if X+Y < LOLIM
+        return ans, 2
+    end
+
+    XN = X
+    YN = Y
+    MU = 0.
+    SN = 0.
+
+    while true
+        MU = (XN+YN+YN)/3.0
+        SN = (YN+MU)/MU - 2.0
+        if abs(SN) < ERRTOL break end
+        LAMDA = 2.0*sqrt(XN)*sqrt(YN) + YN
+        XN = (XN+LAMDA)*0.250
+        YN = (YN+LAMDA)*0.250
+    end
+
+    S = SN*SN*(0.30+SN*(C1+SN*(0.3750+SN*C2)))
+    ans = (1.0+S)/sqrt(MU)
+
+    return ans,0
+end
+
+#***BEGIN PROLOGUE  DRJ
+#***PURPOSE  Compute the incomplete or complete (X or Y or Z is zero)
+#            elliptic integral of the 3rd kind.  For X, Y, and Z non-
+#            negative, at most one of them zero, and P positive,
+#             RJ(X,Y,Z,P) = Integral from zero to infinity of
+#                              -1/2     -1/2     -1/2     -1
+#                    (3/2)(t+X)    (t+Y)    (t+Z)    (t+P)  dt.
+#***LIBRARY   SLATEC
+#***CATEGORY  C14
+#***TYPE      DOUBLE PRECISION (RJ-S, DRJ-D)
+#***KEYWORDS  COMPLETE ELLIPTIC INTEGRAL, DUPLICATION THEOREM,
+#             INCOMPLETE ELLIPTIC INTEGRAL, INTEGRAL OF THE THIRD KIND,
+#             TAYLOR SERIES
+#***AUTHOR  Carlson, B. C.
+#             Ames Laboratory-DOE
+#             Iowa State University
+#             Ames, IA  50011
+#           Notis, E. M.
+#             Ames Laboratory-DOE
+#             Iowa State University
+#             Ames, IA  50011
+#           Pexton, R. L.
+#             Lawrence Livermore National Laboratory
+#             Livermore, CA  94550
+
+function DRJ(X::Float64, Y::Float64, Z::Float64, P::Float64)
+
+    const ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
+    const LOLIM  = (5.0 * D1MACH1)^(1.0/3.0)
+    const UPLIM  = 0.30*( D1MACH2 / 5.0)^(1.0/3.0)
+
+    const C1 = 3.0/14.0
+    const C2 = 1.0/3.0
+    const C3 = 3.0/22.0
+    const C4 = 3.0/26.0
+
+    ans = 0.0
+    if min(X,Y,Z) < 0.0
+        return ans, 1
+    end
+
+    if max(X,Y,Z,P) > UPLIM
+        return ans, 3
+    end
+
+    if min(X+Y,X+Z,Y+Z,P) < LOLIM
+        return ans, 2
+    end
+
+    IER = 0
+    XN = X
+    YN = Y
+    ZN = Z
+    PN = P
+    SIGMA = 0.0
+    POWER4 = 1.0
+    MU = 0.
+    XNDEV = 0.
+    YNDEV = 0.
+    ZNDEV = 0.
+    PNDEV = 0.
+
+    while true
+        MU = (XN+YN+ZN+PN+PN)*0.20
+        XNDEV = (MU-XN)/MU
+        YNDEV = (MU-YN)/MU
+        ZNDEV = (MU-ZN)/MU
+        PNDEV = (MU-PN)/MU
+        EPSLON = max(abs(XNDEV), abs(YNDEV), abs(ZNDEV), abs(PNDEV))
+        if EPSLON < ERRTOL break end
+        XNROOT =  sqrt(XN)
+        YNROOT =  sqrt(YN)
+        ZNROOT =  sqrt(ZN)
+        LAMDA = XNROOT*(YNROOT+ZNROOT) + YNROOT*ZNROOT
+        ALFA = PN*(XNROOT+YNROOT+ZNROOT) + XNROOT*YNROOT*ZNROOT
+        ALFA = ALFA*ALFA
+        BETA = PN*(PN+LAMDA)*(PN+LAMDA)
+        drc,IER = DRC(ALFA,BETA)
+        SIGMA = SIGMA + POWER4*drc
+        POWER4 = POWER4*0.250
+        XN = (XN+LAMDA)*0.250
+        YN = (YN+LAMDA)*0.250
+        ZN = (ZN+LAMDA)*0.250
+        PN = (PN+LAMDA)*0.250
+    end
+
+    EA = XNDEV*(YNDEV+ZNDEV) + YNDEV*ZNDEV
+    EB = XNDEV*YNDEV*ZNDEV
+    EC = PNDEV*PNDEV
+    E2 = EA - 3.0*EC
+    E3 = EB + 2.0*PNDEV*(EA-EC)
+    S1 = 1.0 + E2*(-C1+0.750*C3*E2-1.50*C4*E3)
+    S2 = EB*(0.50*C2+PNDEV*(-C3-C3+PNDEV*C4))
+    S3 = PNDEV*EA*(C2-PNDEV*C3) - C2*PNDEV*EC
+    ans = 3.0*SIGMA + POWER4*(S1+S2+S3)/(MU* sqrt(MU))
+
+    return ans, IER
 end
 
 end # module
