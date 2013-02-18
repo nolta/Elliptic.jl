@@ -31,12 +31,22 @@ E(x::Float32) = float32(E(float64(x)))
 E(x::Real) = E(float64(x))
 @vectorize_1arg Real E
 
-function F(phi::Float64, m::Float64)
-    if m < 0. || m > 1. throw(DomainError()) end
-    sinphi = sin(phi)
-    drf,ierr = SLATEC.DRF(cos(phi)^2, 1. - m*sinphi^2, 1.)
+# assumes 0 ≤ m ≤ 1
+function rawF(sinphi::Float64, m::Float64)
+    sinphi2 = sinphi^2
+    drf,ierr = SLATEC.DRF(1. - sinphi2, 1. - m*sinphi2, 1.)
     @assert ierr == 0
     sinphi*drf
+end
+
+function F(phi::Float64, m::Float64)
+    if m < 0. || m > 1. throw(DomainError()) end
+    if abs(phi) > pi/2
+        # Abramowitz & Stegun (17.4.3)
+        phi2 = phi + pi/2
+        return F(mod(phi2,pi) - pi/2,m) + 2*fld(phi2,pi)*K(m)
+    end
+    rawF(sin(phi), m)
 end
 F(phi::Real, m::Real) = F(float64(phi), float64(m))
 @vectorize_2arg Real F
