@@ -24,6 +24,10 @@ Elliptic Integrals
     <td>E(phi, m)</td>
     <td>Incomplete elliptic integral of the second kind</td>
   </tr>
+  <tr>
+    <td>Pi(n, phi, m)</td>
+    <td>Incomplete elliptic integral of the third kind</td>
+  </tr>
 </table>
 
 The parameter `m = k^2 = sin(α)^2` where `α` is the modular angle.
@@ -82,3 +86,4 @@ Details
 
 ![E(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{1/2}](http://mathurl.com/amde52p.png)
 
+![\Pi(n;\varphi|m) = \int_0^\varphi d\theta\, (1-n\sin^2\theta)^{-1}(1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/bzsx5tw.png)
