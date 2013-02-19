@@ -67,7 +67,7 @@ julia> k,e = Elliptic.ellipke(0.5)
 (1.854074677301372,1.3506438810476757)
 
 julia> sn,cn,dn = Elliptic.ellipj(0.672, 0.36)
-0.6095196917919022,0.792770928653356,0.9307281387786907)
+(0.6095196917919022,0.792770928653356,0.9307281387786907)
 ```
 
 Installation
@@ -82,8 +82,8 @@ julia> Pkg.add("Elliptic")
 Details
 -------
 
-![F(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/akv49po.png)
+![F(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/av9eou5.png)
 
-![E(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{1/2}](http://mathurl.com/amde52p.png)
+![E(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{1/2}](http://mathurl.com/al2zsok.png)
 
 ![\Pi(n;\varphi|m) = \int_0^\varphi d\theta\, (1-n\sin^2\theta)^{-1}(1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/bzsx5tw.png)
