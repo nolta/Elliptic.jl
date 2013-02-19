@@ -1,33 +1,38 @@
 
-Elliptic: elliptic integral special functions
-=============================================
+Elliptic Special Functions
+==========================
 
-This julia package provides the following functions:
+This julia package provides the following:
 
 Elliptic Integrals
 ------------------
 
-```
-F(phi, m)
+<table>
+  <tr>
+    <td>K(m)</td>
+    <td>Complete elliptic integral of the first kind, K(m) = F(π/2,m)</td>
+  </tr>
+  <tr>
+    <td>F(phi, m)</td>
+    <td>Incomplete elliptic integral of the first kind</td>
+  </tr>
+  <tr>
+    <td>E(m)</td>
+    <td>Complete elliptic integral of the second kind, E(m) = E(π/2,m)</td>
+  </tr>
+  <tr>
+    <td>E(phi, m)</td>
+    <td>Incomplete elliptic integral of the second kind</td>
+  </tr>
+</table>
 
-    Incomplete elliptic integral of the first kind:
+The parameter `m = k^2 = sin(α)^2` where `α` is the modular angle.
 
-    F(\phi|m) = \int_0^\phi d\theta (1-m\sin^2\theta)^{-1/2}.
+```jlcon
+julia> import Elliptic
 
-K(m)
-
-    Complete elliptic integral of the first kind: K(m) = F(pi/2|m).
-
-E(phi, m)
-
-    Incomplete elliptic integral of the second kind:
-
-    E(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{1/2}.
-
-E(m)
-
-    Complete elliptic integral of the second kind: E(m) = E(pi/2|m).
-
+julia> julia> Elliptic.K(0.5)
+1.854074677301372
 ```
 
 Jacobi Elliptic Functions
@@ -43,8 +48,37 @@ julia> Elliptic.sn(0.672, 0.36)
 0.6095196917919022
 ```
 
-Matlab-Compatible Functions
----------------------------
+Matlab Compatibility
+--------------------
 
-For convenience, the matlab-compatible `ellipj` and `ellipke` functions are
-also provided.
+For convenience, the matlab compatible `ellipj` and `ellipke` routines are
+also provided. `ellipj(u,m)` is equivalent to `sn(u,m), cn(u,m), dn(u,m)`,
+but faster if you want all three. Likewise, `ellipke(m)` is equivalent to
+`K(m), E(M)`, but faster if you want both.
+
+```jlcon
+julia> import Elliptic
+
+julia> k,e = Elliptic.ellipke(0.5)
+(1.854074677301372,1.3506438810476757)
+
+julia> sn,cn,dn = Elliptic.ellipj(0.672, 0.36)
+0.6095196917919022,0.792770928653356,0.9307281387786907)
+```
+
+Installation
+------------
+
+```jlcon
+julia> Pkg.update()
+
+julia> Pkg.add("Elliptic")
+```
+
+Details
+-------
+
+![F(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/akv49po.png)
+
+![E(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{1/2}](http://mathurl.com/amde52p.png)
+
