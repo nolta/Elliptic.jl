@@ -1,6 +1,6 @@
 
-Elliptic Special Functions
-==========================
+Elliptic Special Functions for Julia
+====================================
 
 This julia package provides the following:
 
@@ -58,7 +58,7 @@ Matlab Compatibility
 For convenience, the matlab compatible `ellipj` and `ellipke` routines are
 also provided. `ellipj(u,m)` is equivalent to `sn(u,m), cn(u,m), dn(u,m)`,
 but faster if you want all three. Likewise, `ellipke(m)` is equivalent to
-`K(m), E(M)`, but faster if you want both.
+`K(m), E(m)`, but faster if you want both.
 
 ```jlcon
 julia> import Elliptic
