@@ -85,28 +85,31 @@ function Pi(n::Float64, phi::Float64, m::Float64)
 end
 Pi(n::Real, phi::Real, m::Real) = Pi(float64(n), float64(phi), float64(m))
 
+# Abramowitz & Stegun, section 16.4, p571
+const _ambuf = Array(Float64, 10)
 function am(u::Float64, m::Float64, tol::Float64)
     if m < 0. || m > 1. throw(DomainError()) end
+    if u == 0. return 0. end
+    if m == 0. return u end
+    if m == 1. return asin(tanh(u)) end
 
     a,b,c,n = 1., sqrt(1.-m), sqrt(m), 0
-    if b == 0. return sin(u), cos(u), 1. end
-    if c == 1. s = sech(u); return tanh(u), s, s end
-
-    ca = [c/a]
     while abs(c) > tol
+        @assert n < 10
         a,b,c,n = 0.5*(a+b), sqrt(a*b), 0.5*(a-b), n+1
-        push!(ca, c/a)
+        _ambuf[n] = c/a
     end
 
     phi = ldexp(a*u, n)
     for i = n:-1:1
-        phi = 0.5*(phi + asin(ca[i+1]*sin(phi)))
+        phi = 0.5*(phi + asin(_ambuf[i]*sin(phi)))
     end
     phi
 end
 am(u::Float64, m::Float64) = am(u, m, eps(Float64))
 
 function ellipj(u::Float64, m::Float64, tol::Float64)
+    if m == 1. s = sech(u); return tanh(u), s, s end
     phi = am(u, m, tol)
     sn = sin(phi)
     cn = cos(phi)

@@ -59,3 +59,32 @@ u20 = 20*K20/90
 @test_approx_eq_eps ns(u20,m20) θn2020/θs2020 4e-9
 @test_approx_eq_eps ds(u20,m20) θd2020/θs2020 4e-9
 @test_approx_eq_eps cs(u20,m20) θc2020/θs2020 4e-9
+
+for u = -1.:0.21:1.
+    @test_approx_eq am(u,0) u
+    @test_approx_eq am(u,1) atan(sinh(u))
+    @test_approx_eq sn(u,0) sin(u)
+    @test_approx_eq cn(u,0) cos(u)
+    @test_approx_eq dn(u,0) 1.
+    @test_approx_eq cd(u,0) cos(u)
+    @test_approx_eq sd(u,0) sin(u)
+    @test_approx_eq nd(u,0) 1.
+    @test_approx_eq dc(u,0) sec(u)
+    @test_approx_eq nc(u,0) sec(u)
+    @test_approx_eq sc(u,0) tan(u)
+    @test_approx_eq ns(u,0) csc(u)
+    @test_approx_eq ds(u,0) csc(u)
+    @test_approx_eq cs(u,0) cot(u)
+    @test_approx_eq sn(u,1) tanh(u)
+    @test_approx_eq cn(u,1) sech(u)
+    @test_approx_eq dn(u,1) sech(u)
+    @test_approx_eq cd(u,1) 1.
+    @test_approx_eq sd(u,1) sinh(u)
+    @test_approx_eq nd(u,1) cosh(u)
+    @test_approx_eq dc(u,1) 1.
+    @test_approx_eq nc(u,1) cosh(u)
+    @test_approx_eq sc(u,1) sinh(u)
+    @test_approx_eq ns(u,1) coth(u)
+    @test_approx_eq ds(u,1) csch(u)
+    @test_approx_eq cs(u,1) csch(u)
+end
