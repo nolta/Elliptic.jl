@@ -42,8 +42,59 @@ julia> julia> Elliptic.K(0.5)
 Jacobi Elliptic Functions
 -------------------------
 
-All 12 `pq(u|m)` functions where p, q are chosen without replacement from
-the letters s, c, d, n. For example,
+<table>
+  <tr>
+    <td>sn(u, m)</td>
+    <td>Jacobi elliptic function, sn(u|m) = sin(am(u|m))</td>
+  </tr>
+  <tr>
+    <td>cn(u, m)</td>
+    <td>Jacobi elliptic function, cn(u|m) = cos(am(u|m))</td>
+  </tr>
+  <tr>
+    <td>dn(u, m)</td>
+    <td>Jacobi elliptic function, dn(u|m)</td>
+  </tr>
+
+  <tr>
+    <td>cd(u, m)</td>
+    <td>Jacobi elliptic function, cd(u|m)</td>
+  </tr>
+  <tr>
+    <td>sd(u, m)</td>
+    <td>Jacobi elliptic function, sd(u|m)</td>
+  </tr>
+  <tr>
+    <td>nd(u, m)</td>
+    <td>Jacobi elliptic function, nd(u|m)</td>
+  </tr>
+
+  <tr>
+    <td>dc(u, m)</td>
+    <td>Jacobi elliptic function, dc(u|m)</td>
+  </tr>
+  <tr>
+    <td>nc(u, m)</td>
+    <td>Jacobi elliptic function, nc(u|m)</td>
+  </tr>
+  <tr>
+    <td>sc(u, m)</td>
+    <td>Jacobi elliptic function, sc(u|m)</td>
+  </tr>
+
+  <tr>
+    <td>ns(u, m)</td>
+    <td>Jacobi elliptic function, ns(u|m)</td>
+  </tr>
+  <tr>
+    <td>ds(u, m)</td>
+    <td>Jacobi elliptic function, ds(u|m)</td>
+  </tr>
+  <tr>
+    <td>cs(u, m)</td>
+    <td>Jacobi elliptic function, cs(u|m)</td>
+  </tr>
+</table>
 
 ```jlcon
 julia> import Elliptic
@@ -54,6 +105,17 @@ julia> Elliptic.sn(0.672, 0.36)
 
 Matlab Compatibility
 --------------------
+
+<table>
+  <tr>
+    <td>ellipj(u, m)</td>
+    <td>returns (sn(u,m), cn(u,m), dn(u,m))</td>
+  </tr>
+  <tr>
+    <td>ellipke(m)</td>
+    <td>returns (K(m), E(m))</td>
+  </tr>
+</table>
 
 For convenience, the matlab compatible `ellipj` and `ellipke` routines are
 also provided. `ellipj(u,m)` is equivalent to `sn(u,m), cn(u,m), dn(u,m)`,
