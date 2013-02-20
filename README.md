@@ -14,7 +14,7 @@ Elliptic Integrals
   </tr>
   <tr>
     <td>F(phi, m)</td>
-    <td>Incomplete elliptic integral of the first kind</td>
+    <td>Incomplete elliptic integral of the first kind, F(φ|m)</td>
   </tr>
   <tr>
     <td>E(m)</td>
@@ -22,11 +22,11 @@ Elliptic Integrals
   </tr>
   <tr>
     <td>E(phi, m)</td>
-    <td>Incomplete elliptic integral of the second kind</td>
+    <td>Incomplete elliptic integral of the second kind, E(φ|m)</td>
   </tr>
   <tr>
     <td>Pi(n, phi, m)</td>
-    <td>Incomplete elliptic integral of the third kind</td>
+    <td>Incomplete elliptic integral of the third kind, Π(n;φ|m)</td>
   </tr>
 </table>
 
