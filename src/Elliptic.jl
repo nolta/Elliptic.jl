@@ -105,8 +105,6 @@ function am(u::Float64, m::Float64, tol::Float64)
     phi
 end
 am(u::Float64, m::Float64) = am(u, m, eps(Float64))
-am(u::Real, m::Real) = am(float64(phi), float64(m))
-@vectorize_2arg Real am
 
 function ellipj(u::Float64, m::Float64, tol::Float64)
     phi = am(u, m, tol)
@@ -119,23 +117,23 @@ ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
 ellipj(u::Real, m::Real) = ellipj(float64(phi), float64(m))
 @vectorize_2arg Real ellipj
 
-sn(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); s)
-cn(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); c)
-dn(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); d)
+sn(u::Float64, m::Float64) = sin(am(u,m))
+cn(u::Float64, m::Float64) = cos(am(u,m))
+dn(u::Float64, m::Float64) = sqrt(1.-m*sn(u,m)^2)
 
-cd(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); c/d)
-sd(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); s/d)
-nd(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); 1/d)
+cd(u::Float64, m::Float64) = (phi=am(u,m); cos(phi)/sqrt(1.-m*sin(phi)^2))
+sd(u::Float64, m::Float64) = (s=sn(u,m); s/sqrt(1.-m*s^2))
+nd(u::Float64, m::Float64) = 1/dn(u,m)
 
-dc(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); d/c)
-nc(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); 1/c)
-sc(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); s/c)
+dc(u::Float64, m::Float64) = (phi=am(u,m); sqrt(1.-m*sin(phi)^2)/cos(phi))
+nc(u::Float64, m::Float64) = 1/cn(u,m)
+sc(u::Float64, m::Float64) = (phi=am(u,m); sin(phi)/cos(phi))
 
-ns(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); 1/s)
-ds(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); d/s)
-cs(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); c/s)
+ns(u::Float64, m::Float64) = 1/sn(u,m)
+ds(u::Float64, m::Float64) = (s=sn(u,m); sqrt(1.-m*s^2)/s)
+cs(u::Float64, m::Float64) = (phi=am(u,m); cos(phi)/sin(phi))
 
-for f in (:sn, :cn, :dn, :cd, :sd, :nd, :dc, :nc, :sc, :ns, :ds, :cs)
+for f in (:am, :sn, :cn, :dn, :cd, :sd, :nd, :dc, :nc, :sc, :ns, :ds, :cs)
     @eval begin
         ($f)(u::Real, m::Real) = ($f)(float64(u), float64(m))
         @vectorize_2arg Real $f

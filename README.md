@@ -70,7 +70,7 @@ Jacobi Elliptic Functions
   </tr>
   <tr>
     <td>nd(u, m)</td>
-    <td>Jacobi elliptic function, nd(u|m)</td>
+    <td>Jacobi elliptic function, nd(u|m) = 1/dn(u|m)</td>
   </tr>
 
   <tr>
@@ -79,7 +79,7 @@ Jacobi Elliptic Functions
   </tr>
   <tr>
     <td>nc(u, m)</td>
-    <td>Jacobi elliptic function, nc(u|m)</td>
+    <td>Jacobi elliptic function, nc(u|m) = 1/cn(u|m)</td>
   </tr>
   <tr>
     <td>sc(u, m)</td>
@@ -88,7 +88,7 @@ Jacobi Elliptic Functions
 
   <tr>
     <td>ns(u, m)</td>
-    <td>Jacobi elliptic function, ns(u|m)</td>
+    <td>Jacobi elliptic function, ns(u|m) = 1/sn(u|m)</td>
   </tr>
   <tr>
     <td>ds(u, m)</td>
