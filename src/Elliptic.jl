@@ -4,7 +4,7 @@ module Elliptic
 export E, F, K, Pi
 
 # jacobi elliptic functions
-export sn, cn, dn, cd, sd, nd, dc, nc, sc, ns, ds, cs
+export am, sn, cn, dn, cd, sd, nd, dc, nc, sc, ns, ds, cs
 
 # matlab compatible
 export ellipj, ellipke
@@ -85,7 +85,7 @@ function Pi(n::Float64, phi::Float64, m::Float64)
 end
 Pi(n::Real, phi::Real, m::Real) = Pi(float64(n), float64(phi), float64(m))
 
-function ellipj(u::Float64, m::Float64, tol::Float64)
+function am(u::Float64, m::Float64, tol::Float64)
     if m < 0. || m > 1. throw(DomainError()) end
 
     a,b,c,n = 1., sqrt(1.-m), sqrt(m), 0
@@ -102,13 +102,21 @@ function ellipj(u::Float64, m::Float64, tol::Float64)
     for i = n:-1:1
         phi = 0.5*(phi + asin(ca[i+1]*sin(phi)))
     end
+    phi
+end
+am(u::Float64, m::Float64) = am(u, m, eps(Float64))
+am(u::Real, m::Real) = am(float64(phi), float64(m))
+@vectorize_2arg Real am
 
+function ellipj(u::Float64, m::Float64, tol::Float64)
+    phi = am(u, m, tol)
     sn = sin(phi)
     cn = cos(phi)
     dn = sqrt(1. - m*sn^2)
     sn, cn, dn
 end
 ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
+ellipj(u::Real, m::Real) = ellipj(float64(phi), float64(m))
 @vectorize_2arg Real ellipj
 
 sn(u::Float64, m::Float64) = ((s,c,d)=ellipj(u,m); s)

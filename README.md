@@ -44,6 +44,10 @@ Jacobi Elliptic Functions
 
 <table>
   <tr>
+    <td>am(u, m)</td>
+    <td>Jacobi amplitude, defined by u = F(am(u|m)|m)</td>
+  </tr>
+  <tr>
     <td>sn(u, m)</td>
     <td>Jacobi elliptic function, sn(u|m) = sin(am(u|m))</td>
   </tr>
@@ -53,7 +57,7 @@ Jacobi Elliptic Functions
   </tr>
   <tr>
     <td>dn(u, m)</td>
-    <td>Jacobi elliptic function, dn(u|m)</td>
+    <td>Jacobi elliptic function, dn(u|m) = sqrt(1 - m sn(u|m)^2)</td>
   </tr>
 
   <tr>
