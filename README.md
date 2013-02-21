@@ -101,10 +101,10 @@ Jacobi Elliptic Functions
 </table>
 
 ```jlcon
-julia> import Elliptic
+julia> import Elliptic.Jacobi
 
-julia> Elliptic.sn(0.672, 0.36)
-0.6095196917919022
+julia> Jacobi.sn(2,9)
+-0.15028246569211734
 ```
 
 Matlab Compatibility

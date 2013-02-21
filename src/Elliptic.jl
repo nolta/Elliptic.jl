@@ -4,11 +4,12 @@ module Elliptic
 export E, F, K, Pi
 
 # jacobi elliptic functions
-export am, sn, cn, dn, cd, sd, nd, dc, nc, sc, ns, ds, cs
+export Jacobi
 
 # matlab compatible
 export ellipj, ellipke
 
+include("jacobi.jl")
 include("slatec.jl")
 
 function E(phi::Float64, m::Float64)
@@ -85,62 +86,15 @@ function Pi(n::Float64, phi::Float64, m::Float64)
 end
 Pi(n::Real, phi::Real, m::Real) = Pi(float64(n), float64(phi), float64(m))
 
-# Abramowitz & Stegun, section 16.4, p571
-const _ambuf = Array(Float64, 10)
-function am(u::Float64, m::Float64, tol::Float64)
-    if m < 0. || m > 1. throw(DomainError()) end
-    if u == 0. return 0. end
-    if m == 0. return u end
-    if m == 1. return asin(tanh(u)) end
-
-    a,b,c,n = 1., sqrt(1.-m), sqrt(m), 0
-    while abs(c) > tol
-        @assert n < 10
-        a,b,c,n = 0.5*(a+b), sqrt(a*b), 0.5*(a-b), n+1
-        _ambuf[n] = c/a
-    end
-
-    phi = ldexp(a*u, n)
-    for i = n:-1:1
-        phi = 0.5*(phi + asin(_ambuf[i]*sin(phi)))
-    end
-    phi
-end
-am(u::Float64, m::Float64) = am(u, m, eps(Float64))
-
 function ellipj(u::Float64, m::Float64, tol::Float64)
-    if m == 1. s = sech(u); return tanh(u), s, s end
-    phi = am(u, m, tol)
-    sn = sin(phi)
-    cn = cos(phi)
-    dn = sqrt(1. - m*sn^2)
-    sn, cn, dn
+    phi = Jacobi.am(u, m, tol)
+    s = sin(phi)
+    c = cos(phi)
+    d = sqrt(1. - m*s^2)
+    s, c, d
 end
 ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
 ellipj(u::Real, m::Real) = ellipj(float64(phi), float64(m))
 @vectorize_2arg Real ellipj
-
-sn(u::Float64, m::Float64) = sin(am(u,m))
-cn(u::Float64, m::Float64) = cos(am(u,m))
-dn(u::Float64, m::Float64) = sqrt(1.-m*sn(u,m)^2)
-
-cd(u::Float64, m::Float64) = (phi=am(u,m); cos(phi)/sqrt(1.-m*sin(phi)^2))
-sd(u::Float64, m::Float64) = (s=sn(u,m); s/sqrt(1.-m*s^2))
-nd(u::Float64, m::Float64) = 1/dn(u,m)
-
-dc(u::Float64, m::Float64) = (phi=am(u,m); sqrt(1.-m*sin(phi)^2)/cos(phi))
-nc(u::Float64, m::Float64) = 1/cn(u,m)
-sc(u::Float64, m::Float64) = (phi=am(u,m); sin(phi)/cos(phi))
-
-ns(u::Float64, m::Float64) = 1/sn(u,m)
-ds(u::Float64, m::Float64) = (s=sn(u,m); sqrt(1.-m*s^2)/s)
-cs(u::Float64, m::Float64) = (phi=am(u,m); cos(phi)/sin(phi))
-
-for f in (:am, :sn, :cn, :dn, :cd, :sd, :nd, :dc, :nc, :sc, :ns, :ds, :cs)
-    @eval begin
-        ($f)(u::Real, m::Real) = ($f)(float64(u), float64(m))
-        @vectorize_2arg Real $f
-    end
-end
 
 end # module

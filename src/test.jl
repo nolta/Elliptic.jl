@@ -2,6 +2,7 @@ using Test
 
 include("Elliptic.jl")
 using Elliptic
+using Elliptic.Jacobi
 
 @test_approx_eq E(0) pi/2
 @test_approx_eq E(1) 1
@@ -59,10 +60,14 @@ u20 = 20*K20/90
 @test_approx_eq_eps ns(u20,m20) θn2020/θs2020 4e-9
 @test_approx_eq_eps ds(u20,m20) θd2020/θs2020 4e-9
 @test_approx_eq_eps cs(u20,m20) θc2020/θs2020 4e-9
+# ellipj
+s,c,d = ellipj(u20,m20)
+@test_approx_eq_eps s θs2020/θn2020 1e-9
+@test_approx_eq_eps c θc2020/θn2020 1e-9
+@test_approx_eq_eps d θd2020/θn2020 1e-9
 
 for u = -1.:0.21:1.
     @test_approx_eq am(u,0) u
-    @test_approx_eq am(u,1) atan(sinh(u))
     @test_approx_eq sn(u,0) sin(u)
     @test_approx_eq cn(u,0) cos(u)
     @test_approx_eq dn(u,0) 1.
@@ -75,6 +80,8 @@ for u = -1.:0.21:1.
     @test_approx_eq ns(u,0) csc(u)
     @test_approx_eq ds(u,0) csc(u)
     @test_approx_eq cs(u,0) cot(u)
+
+    @test_approx_eq am(u,1) atan(sinh(u))
     @test_approx_eq sn(u,1) tanh(u)
     @test_approx_eq cn(u,1) sech(u)
     @test_approx_eq dn(u,1) sech(u)
