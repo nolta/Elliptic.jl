@@ -14,7 +14,13 @@ include("slatec.jl")
 
 function E(phi::Float64, m::Float64)
     if m < 0. || m > 1. throw(DomainError()) end
-    sinphi = sin(phi)
+    if abs(phi) > pi/2
+        phi2 = phi + pi/2
+        return 2*fld(phi2,pi)*E(m) - _E(cos(mod(phi2,pi)), m)
+    end
+    _E(sin(phi), m)
+end
+function _E(sinphi::Float64, m::Float64)
     sinphi2 = sinphi^2
     cosphi2 = 1. - sinphi2
     y = 1. - m*sinphi2
@@ -55,7 +61,7 @@ function F(phi::Float64, m::Float64)
     if abs(phi) > pi/2
         # Abramowitz & Stegun (17.4.3)
         phi2 = phi + pi/2
-        return F(mod(phi2,pi) - pi/2,m) + 2*fld(phi2,pi)*K(m)
+        return 2*fld(phi2,pi)*K(m) - rawF(cos(mod(phi2,pi)), m)
     end
     rawF(sin(phi), m)
 end

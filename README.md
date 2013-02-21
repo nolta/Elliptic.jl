@@ -35,7 +35,7 @@ The parameter `m = k^2 = sin(α)^2` where `α` is the modular angle.
 ```jlcon
 julia> import Elliptic
 
-julia> julia> Elliptic.K(0.5)
+julia> Elliptic.K(0.5)
 1.854074677301372
 ```
 
@@ -103,7 +103,7 @@ Jacobi Elliptic Functions
 ```jlcon
 julia> import Elliptic.Jacobi
 
-julia> Jacobi.sn(2,9)
+julia> Jacobi.sn(2, 9)
 -0.15028246569211734
 ```
 
