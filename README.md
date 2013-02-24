@@ -30,7 +30,7 @@ Elliptic Integrals
   </tr>
 </table>
 
-The parameter `m = k^2 = sin(α)^2` where `α` is the modular angle.
+The parameter `m = k^2 = sin(α)^2` where `α` is the modular angle and `k` is the modulus.
 
 ```jlcon
 julia> import Elliptic
@@ -145,8 +145,8 @@ julia> Pkg.update()
 julia> Pkg.add("Elliptic")
 ```
 
-Details
--------
+Definitions
+-----------
 
 ![F(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/av9eou5.png)
 

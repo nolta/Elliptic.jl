@@ -4,8 +4,39 @@ include("Elliptic.jl")
 using Elliptic
 using Elliptic.Jacobi
 
+# values from Abramowitz & Stegun, Table 17.1 (p608-609)
+#    m            K(m)             E(m)
+table17p1 = [
+    0.00  1.57079_63267_94897  1.57079_6327;
+    0.01  1.57474_55615_17356  1.56686_1942;
+    0.10  1.61244_13487_20219  1.53075_7637;
+    0.20  1.65962_35986_10528  1.48903_5058;
+    0.50  1.85407_46773_01372  1.35064_3881;
+    0.90  2.57809_21133_48173  1.10477_4733;
+    0.99  3.69563_73629_89875  1.01599_3546;
+]
+
+for i = 1:size(table17p1,1)
+    m = table17p1[i,1]
+    k = table17p1[i,2]
+    e = table17p1[i,3]
+    @test_approx_eq_eps K(m) k 1e-15
+    @test_approx_eq_eps E(m) e 1e-9
+    @test_approx_eq_eps F(pi/2,m) k 1e-15
+    @test_approx_eq_eps E(pi/2,m) e 1e-9
+    a,b = ellipke(m)
+    @test_approx_eq_eps a k 1e-15
+    @test_approx_eq_eps b e 1e-9
+
+end
+
+@test_approx_eq K(0) pi/2
+@test_approx_eq K(0.5) (0.25/sqrt(pi))*gamma(0.25)^2
+@test           K(1) == Inf
+
 @test_approx_eq E(0) pi/2
 @test_approx_eq E(1) 1
+
 @test_approx_eq E(0,0.5) 0
 @test_approx_eq E(0.5,0) 0.5
 @test_approx_eq E(0.5,1) sin(0.5)
@@ -13,14 +44,6 @@ using Elliptic.Jacobi
 @test_approx_eq F(0,0.5) 0
 @test_approx_eq F(0.5,0) 0.5
 @test_approx_eq F(0.5,1) log(sec(0.5) + tan(0.5))
-
-@test_approx_eq K(0) pi/2
-@test_approx_eq K(0.5) (0.25/sqrt(pi))*gamma(0.25)^2
-@test           K(1) == Inf
-
-# values from Abramowitz & Stegun, Table 17.1 (p608-609)
-@test_approx_eq_eps E(0.1) 1.53075_7637 1e-9
-@test_approx_eq_eps K(0.1) 1.61244_13487_20219 1e-15
 
 # values from Abramowitz & Stegun, Table 17.2 (p610-611)
 m20 = sind(20)^2
