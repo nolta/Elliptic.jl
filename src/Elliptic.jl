@@ -50,6 +50,7 @@ E(x::Real) = E(float64(x))
 
 # assumes 0 ≤ m ≤ 1
 function rawF(sinphi::Float64, m::Float64)
+    if abs(sinphi) == 1. && m == 1. return sign(sinphi)*Inf end
     sinphi2 = sinphi^2
     drf,ierr = SLATEC.DRF(1. - sinphi2, 1. - m*sinphi2, 1.)
     @assert ierr == 0
