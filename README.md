@@ -10,7 +10,7 @@ Elliptic Integrals
 <table>
   <tr>
     <td>K(m)</td>
-    <td>Complete elliptic integral of the first kind, K(m) = F(π/2,m)</td>
+    <td>Complete elliptic integral of the first kind, K(m) = F(π/2|m)</td>
   </tr>
   <tr>
     <td>F(phi, m)</td>
@@ -18,7 +18,7 @@ Elliptic Integrals
   </tr>
   <tr>
     <td>E(m)</td>
-    <td>Complete elliptic integral of the second kind, E(m) = E(π/2,m)</td>
+    <td>Complete elliptic integral of the second kind, E(m) = E(π/2|m)</td>
   </tr>
   <tr>
     <td>E(phi, m)</td>

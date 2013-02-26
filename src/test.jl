@@ -203,14 +203,21 @@ for i = 1:size(table17p5,1)
     alpha = table17p5[i,1]
     m = sind(alpha)^2
     for j = 2:size(table17p5,2)
-        phi = degrees2radians(5*(j-2))
+        phid = 5*(j-2)
+        phi = degrees2radians(phid)
         f = table17p5[i,j]
         if f == Inf
             @test F(phi,m) == f
             @test F(-phi,m) == -f
+            if phid == 90
+                @test K(m) == f
+            end
         else
             @test_approx_eq_eps F(phi,m) f 1e-8
             @test_approx_eq_eps F(-phi,m) -f 1e-8
+            if phid == 90
+                @test_approx_eq_eps K(m) f 1e-8
+            end
         end
     end
 end
