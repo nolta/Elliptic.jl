@@ -26,8 +26,13 @@ function _E(sinphi::Float64, m::Float64)
     y = 1. - m*sinphi2
     drf,ierr1 = SLATEC.DRF(cosphi2, y, 1.)
     drd,ierr2 = SLATEC.DRD(cosphi2, y, 1.)
-    @assert ierr1 == 0 && ierr2 == 0
-    sinphi*(drf - m*sinphi2*drd/3)
+    if ierr1 == ierr2 == 0
+        return sinphi*(drf - m*sinphi2*drd/3)
+    elseif ierr1 == ierr2 == 2
+        # 2 - (1+m)*sinphi2 < tol
+        return sinphi
+    end
+    NaN
 end
 E(phi::Real, m::Real) = E(float64(phi), float64(m))
 @vectorize_2arg Real E
