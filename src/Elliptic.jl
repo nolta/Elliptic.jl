@@ -93,8 +93,13 @@ function Pi(n::Float64, phi::Float64, m::Float64)
     y = 1. - m*sinphi2
     drf,ierr1 = SLATEC.DRF(cosphi2, y, 1.)
     drj,ierr2 = SLATEC.DRJ(cosphi2, y, 1., 1. - n*sinphi2)
-    @assert ierr1 == 0 && ierr2 == 0
-    sinphi*(drf + n*sinphi2*drj/3)
+    if ierr1 == 0 && ierr2 == 0
+        return sinphi*(drf + n*sinphi2*drj/3)
+    elseif ierr1 == 2 && ierr2 == 2
+        # 2 - (1+m)*sinphi2 < tol
+        return Inf
+    end
+    NaN
 end
 Pi(n::Real, phi::Real, m::Real) = Pi(float64(n), float64(phi), float64(m))
 
