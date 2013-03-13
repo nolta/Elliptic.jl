@@ -98,6 +98,9 @@ function Pi(n::Float64, phi::Float64, m::Float64)
     elseif ierr1 == 2 && ierr2 == 2
         # 2 - (1+m)*sinphi2 < tol
         return Inf
+    elseif ierr1 == 0 && ierr2 == 2
+        # 1 - n*sinphi2 < tol
+        return Inf
     end
     NaN
 end
