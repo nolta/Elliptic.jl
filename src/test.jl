@@ -1,4 +1,4 @@
-using Test
+using Base.Test
 
 include("Elliptic.jl")
 using Elliptic
