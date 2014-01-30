@@ -4,6 +4,10 @@ include("Elliptic.jl")
 using Elliptic
 using Elliptic.Jacobi
 
+if !isdefined(:deg2rad)
+    const deg2rad = degrees2radians
+end
+
 ### K(m), E(m), ellipke(m), F(pi/2,m), E(pi/2,m) ###
 
 # values from Abramowitz & Stegun, Table 17.1 (p608-609)
@@ -357,7 +361,7 @@ for i = 1:size(table17p5,1)
     m = sind(alpha)^2
     for j = 2:size(table17p5,2)
         phid = 5*(j-2)
-        phi = degrees2radians(phid)
+        phi = deg2rad(phid)
         f = table17p5[i,j]
         if f == Inf
             @test F(phi,m) == f
@@ -542,7 +546,7 @@ for i = 1:size(table17p6,1)
     m = sind(alpha)^2
     for j = 2:size(table17p6,2)
         phid = 5*(j-2)
-        phi = degrees2radians(phid)
+        phi = deg2rad(phid)
         e = table17p6[i,j]
         @test_approx_eq_eps E(phi,m) e 1e-8
         @test_approx_eq_eps E(-phi,m) -e 1e-8
@@ -573,8 +577,8 @@ E20 = 1.52379_92052_59774
 E2020 = 0.34825_492
 F2020 = 0.34988_016
 for i = -2:2
-    @test_approx_eq_eps E(degrees2radians(20+180i), m20) E2020 + 2i*E20 1e-8
-    @test_approx_eq_eps F(degrees2radians(20+180i), m20) F2020 + 2i*K20 1e-8
+    @test_approx_eq_eps E(deg2rad(20+180i), m20) E2020 + 2i*E20 1e-8
+    @test_approx_eq_eps F(deg2rad(20+180i), m20) F2020 + 2i*K20 1e-8
 end
 
 #                       Abramowitz & Stegun, Table 17.9, p625-6
@@ -667,7 +671,7 @@ for i = 1:size(table17p9,1)
     for j = 3:size(table17p9,2)
         phi = 15.*(j-3)
         x = table17p9[i,j]
-        y = Pi(n, degrees2radians(phi), m)
+        y = Pi(n, deg2rad(phi), m)
         if x == Inf
             @test x == y
         else
