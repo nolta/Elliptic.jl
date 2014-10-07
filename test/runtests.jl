@@ -1,6 +1,6 @@
 using Base.Test
 
-include("Elliptic.jl")
+include("../src/Elliptic.jl")
 using Elliptic
 using Elliptic.Jacobi
 
