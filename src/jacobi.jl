@@ -70,7 +70,7 @@ for (f,a,b,c) in ((:sn, :(sin(phi)),                :(sqrtmu1*s), :(sqrt(mu)*sin
     end
 end
 
-xn = {:s => :(sn(u,m)), :c => :(cn(u,m)), :d => :(dn(u,m)), :n => :(1.)}
+xn = Dict{Symbol, Any}(:s => :(sn(u,m)), :c => :(cn(u,m)), :d => :(dn(u,m)), :n => :(1.))
 for (p,num) in xn, (q,den) in xn
     if p == q continue end
     f = symbol(string(p,q))
