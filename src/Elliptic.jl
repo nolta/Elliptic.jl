@@ -34,7 +34,7 @@ function _E(sinphi::Float64, m::Float64)
     end
     NaN
 end
-E(phi::Real, m::Real) = E(float64(phi), float64(m))
+E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
 @vectorize_2arg Real E
 
 function ellipke(m::Float64)
@@ -46,11 +46,11 @@ function ellipke(m::Float64)
     @assert ierr1 == 0 && ierr2 == 0
     drf, drf - m*drd/3
 end
-ellipke(x::Real) = ellipke(float64(x))
+ellipke(x::Real) = ellipke(Float64(x))
 
 E(m::Float64) = ellipke(m)[2]
-E(x::Float32) = float32(E(float64(x)))
-E(x::Real) = E(float64(x))
+E(x::Float32) = Float32(E(Float64(x)))
+E(x::Real) = E(Float64(x))
 @vectorize_1arg Real E
 
 # assumes 0 ≤ m ≤ 1
@@ -71,7 +71,7 @@ function F(phi::Float64, m::Float64)
     end
     rawF(sin(phi), m)
 end
-F(phi::Real, m::Real) = F(float64(phi), float64(m))
+F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
 @vectorize_2arg Real F
 
 function K(m::Float64)
@@ -81,8 +81,8 @@ function K(m::Float64)
     @assert ierr == 0
     drf
 end
-K(x::Float32) = float32(K(float64(x)))
-K(x::Real) = K(float64(x))
+K(x::Float32) = Float32(K(Float64(x)))
+K(x::Real) = K(Float64(x))
 @vectorize_1arg Real K
 
 function Pi(n::Float64, phi::Float64, m::Float64)
@@ -104,7 +104,7 @@ function Pi(n::Float64, phi::Float64, m::Float64)
     end
     NaN
 end
-Pi(n::Real, phi::Real, m::Real) = Pi(float64(n), float64(phi), float64(m))
+Pi(n::Real, phi::Real, m::Real) = Pi(Float64(n), Float64(phi), Float64(m))
 
 function ellipj(u::Float64, m::Float64, tol::Float64)
     phi = Jacobi.am(u, m, tol)
@@ -114,7 +114,7 @@ function ellipj(u::Float64, m::Float64, tol::Float64)
     s, c, d
 end
 ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
-ellipj(u::Real, m::Real) = ellipj(float64(phi), float64(m))
+ellipj(u::Real, m::Real) = ellipj(Float64(phi), Float64(m))
 @vectorize_2arg Real ellipj
 
 end # module

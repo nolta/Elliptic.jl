@@ -38,7 +38,7 @@ function am(u::Float64, m::Float64, tol::Float64)
     _am(u, m, tol)
 end
 am(u::Float64, m::Float64) = am(u, m, eps(Float64))
-am(u::Real, m::Real) = am(float64(u), float64(m))
+am(u::Real, m::Real) = am(Float64(u), Float64(m))
 @vectorize_2arg Real am
 
 for (f,a,b,c) in ((:sn, :(sin(phi)),                :(sqrtmu1*s), :(sqrt(mu)*sin(phi))),
@@ -70,7 +70,7 @@ for (f,a,b,c) in ((:sn, :(sin(phi)),                :(sqrtmu1*s), :(sqrt(mu)*sin
     end
 end
 
-xn = {:s => :(sn(u,m)), :c => :(cn(u,m)), :d => :(dn(u,m)), :n => :(1.)}
+xn = ((:s,:(sn(u,m))), (:c,:(cn(u,m))), (:d,:(dn(u,m))), (:n,:(1.)))
 for (p,num) in xn, (q,den) in xn
     if p == q continue end
     f = symbol(string(p,q))
@@ -78,7 +78,7 @@ for (p,num) in xn, (q,den) in xn
         @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
     end
     @eval begin
-        ($f)(u::Real, m::Real) = ($f)(float64(u), float64(m))
+        ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
         @vectorize_2arg Real $f
     end
 end

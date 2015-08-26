@@ -2,7 +2,6 @@ using Base.Test
 
 include("../src/Elliptic.jl")
 using Elliptic
-using Elliptic.Jacobi
 
 if !isdefined(:deg2rad)
     const deg2rad = degrees2radians
@@ -681,28 +680,27 @@ for i = 1:size(table17p9,1)
 end
 
 # values from Abramowitz & Stegun, Table 16.1 (p582-583)
-sn(0.672,0.36)
 u20 = 20*K20/90
 θs2020 = 0.35274_9211
 θc2020 = 0.96935_0025/sqrt(secd(20))
 θd2020 = 1.02789_45992/sqrt(secd(20))
 θn2020 = 1.00369_53131
 # sn, cn, dn
-@test_approx_eq_eps sn(u20,m20) θs2020/θn2020 1e-9
-@test_approx_eq_eps cn(u20,m20) θc2020/θn2020 1e-9
-@test_approx_eq_eps dn(u20,m20) θd2020/θn2020 1e-9
-# cd, sd, nd
-@test_approx_eq_eps cd(u20,m20) θc2020/θd2020 1e-9
-@test_approx_eq_eps sd(u20,m20) θs2020/θd2020 1e-9
-@test_approx_eq_eps nd(u20,m20) θn2020/θd2020 1e-9
-# dc, nc, sc
-@test_approx_eq_eps dc(u20,m20) θd2020/θc2020 1e-9
-@test_approx_eq_eps nc(u20,m20) θn2020/θc2020 1e-9
-@test_approx_eq_eps sc(u20,m20) θs2020/θc2020 1e-9
-# ns, ds, cs
-@test_approx_eq_eps ns(u20,m20) θn2020/θs2020 4e-9
-@test_approx_eq_eps ds(u20,m20) θd2020/θs2020 4e-9
-@test_approx_eq_eps cs(u20,m20) θc2020/θs2020 4e-9
+@test_approx_eq_eps Jacobi.sn(u20,m20) θs2020/θn2020 1e-9
+@test_approx_eq_eps Jacobi.cn(u20,m20) θc2020/θn2020 1e-9
+@test_approx_eq_eps Jacobi.dn(u20,m20) θd2020/θn2020 1e-9
+# Jacobi.cd, sd, nd
+@test_approx_eq_eps Jacobi.cd(u20,m20) θc2020/θd2020 1e-9
+@test_approx_eq_eps Jacobi.sd(u20,m20) θs2020/θd2020 1e-9
+@test_approx_eq_eps Jacobi.nd(u20,m20) θn2020/θd2020 1e-9
+# Jacobi.dc, nc, sc
+@test_approx_eq_eps Jacobi.dc(u20,m20) θd2020/θc2020 1e-9
+@test_approx_eq_eps Jacobi.nc(u20,m20) θn2020/θc2020 1e-9
+@test_approx_eq_eps Jacobi.sc(u20,m20) θs2020/θc2020 1e-9
+# Jacobi.ns, ds, cs
+@test_approx_eq_eps Jacobi.ns(u20,m20) θn2020/θs2020 4e-9
+@test_approx_eq_eps Jacobi.ds(u20,m20) θd2020/θs2020 4e-9
+@test_approx_eq_eps Jacobi.cs(u20,m20) θc2020/θs2020 4e-9
 # ellipj
 s,c,d = ellipj(u20,m20)
 @test_approx_eq_eps s θs2020/θn2020 1e-9
@@ -710,31 +708,31 @@ s,c,d = ellipj(u20,m20)
 @test_approx_eq_eps d θd2020/θn2020 1e-9
 
 for u = -1.:0.21:1.
-    @test_approx_eq am(u,0) u
-    @test_approx_eq sn(u,0) sin(u)
-    @test_approx_eq cn(u,0) cos(u)
-    @test_approx_eq dn(u,0) 1.
-    @test_approx_eq cd(u,0) cos(u)
-    @test_approx_eq sd(u,0) sin(u)
-    @test_approx_eq nd(u,0) 1.
-    @test_approx_eq dc(u,0) sec(u)
-    @test_approx_eq nc(u,0) sec(u)
-    @test_approx_eq sc(u,0) tan(u)
-    @test_approx_eq ns(u,0) csc(u)
-    @test_approx_eq ds(u,0) csc(u)
-    @test_approx_eq cs(u,0) cot(u)
+    @test_approx_eq Jacobi.am(u,0) u
+    @test_approx_eq Jacobi.sn(u,0) sin(u)
+    @test_approx_eq Jacobi.cn(u,0) cos(u)
+    @test_approx_eq Jacobi.dn(u,0) 1.
+    @test_approx_eq Jacobi.cd(u,0) cos(u)
+    @test_approx_eq Jacobi.sd(u,0) sin(u)
+    @test_approx_eq Jacobi.nd(u,0) 1.
+    @test_approx_eq Jacobi.dc(u,0) sec(u)
+    @test_approx_eq Jacobi.nc(u,0) sec(u)
+    @test_approx_eq Jacobi.sc(u,0) tan(u)
+    @test_approx_eq Jacobi.ns(u,0) csc(u)
+    @test_approx_eq Jacobi.ds(u,0) csc(u)
+    @test_approx_eq Jacobi.cs(u,0) cot(u)
 
-    @test_approx_eq am(u,1) atan(sinh(u))
-    @test_approx_eq sn(u,1) tanh(u)
-    @test_approx_eq cn(u,1) sech(u)
-    @test_approx_eq dn(u,1) sech(u)
-    @test_approx_eq cd(u,1) 1.
-    @test_approx_eq sd(u,1) sinh(u)
-    @test_approx_eq nd(u,1) cosh(u)
-    @test_approx_eq dc(u,1) 1.
-    @test_approx_eq nc(u,1) cosh(u)
-    @test_approx_eq sc(u,1) sinh(u)
-    @test_approx_eq ns(u,1) coth(u)
-    @test_approx_eq ds(u,1) csch(u)
-    @test_approx_eq cs(u,1) csch(u)
+    @test_approx_eq Jacobi.am(u,1) atan(sinh(u))
+    @test_approx_eq Jacobi.sn(u,1) tanh(u)
+    @test_approx_eq Jacobi.cn(u,1) sech(u)
+    @test_approx_eq Jacobi.dn(u,1) sech(u)
+    @test_approx_eq Jacobi.cd(u,1) 1.
+    @test_approx_eq Jacobi.sd(u,1) sinh(u)
+    @test_approx_eq Jacobi.nd(u,1) cosh(u)
+    @test_approx_eq Jacobi.dc(u,1) 1.
+    @test_approx_eq Jacobi.nc(u,1) cosh(u)
+    @test_approx_eq Jacobi.sc(u,1) sinh(u)
+    @test_approx_eq Jacobi.ns(u,1) coth(u)
+    @test_approx_eq Jacobi.ds(u,1) csch(u)
+    @test_approx_eq Jacobi.cs(u,1) csch(u)
 end
