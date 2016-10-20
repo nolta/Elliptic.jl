@@ -73,7 +73,7 @@ end
 xn = ((:s,:(sn(u,m))), (:c,:(cn(u,m))), (:d,:(dn(u,m))), (:n,:(1.)))
 for (p,num) in xn, (q,den) in xn
     if p == q continue end
-    f = symbol(string(p,q))
+    f = Symbol(string(p,q))
     if q != :n
         @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
     end
