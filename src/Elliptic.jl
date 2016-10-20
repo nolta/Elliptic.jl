@@ -1,5 +1,6 @@
-module Elliptic
+__precompile__()
 
+module Elliptic
 # elliptic integrals of 1st/2nd/3rd kind
 export E, F, K, Pi
 
