@@ -1,6 +1,7 @@
-
 Elliptic Special Functions for Julia
 ====================================
+
+[![Build Status](https://travis-ci.org/nolta/Elliptic.jl.svg?branch=master)](https://travis-ci.org/nolta/Elliptic.jl)
 
 This julia package provides the following:
 
