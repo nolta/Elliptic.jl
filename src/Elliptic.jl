@@ -36,7 +36,6 @@ function _E(sinphi::Float64, m::Float64)
     NaN
 end
 E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
-@vectorize_2arg Real E
 
 function ellipke(m::Float64)
     if m < 0. || m > 1. throw(DomainError()) end
@@ -52,7 +51,6 @@ ellipke(x::Real) = ellipke(Float64(x))
 E(m::Float64) = ellipke(m)[2]
 E(x::Float32) = Float32(E(Float64(x)))
 E(x::Real) = E(Float64(x))
-@vectorize_1arg Real E
 
 # assumes 0 ≤ m ≤ 1
 function rawF(sinphi::Float64, m::Float64)
@@ -73,7 +71,6 @@ function F(phi::Float64, m::Float64)
     rawF(sin(phi), m)
 end
 F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
-@vectorize_2arg Real F
 
 function K(m::Float64)
     if m < 0. || m > 1. throw(DomainError()) end
@@ -84,7 +81,6 @@ function K(m::Float64)
 end
 K(x::Float32) = Float32(K(Float64(x)))
 K(x::Real) = K(Float64(x))
-@vectorize_1arg Real K
 
 function Pi(n::Float64, phi::Float64, m::Float64)
     if m < 0. || m > 1. throw(DomainError()) end
@@ -116,6 +112,5 @@ function ellipj(u::Float64, m::Float64, tol::Float64)
 end
 ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
 ellipj(u::Real, m::Real) = ellipj(Float64(phi), Float64(m))
-@vectorize_2arg Real ellipj
 
 end # module

@@ -3,7 +3,7 @@ module Jacobi
 export am, sn, cn, dn, cd, sd, nd, dc, nc, sc, ns, ds, cs
 
 # Abramowitz & Stegun, section 16.4, p571
-const _ambuf = Array(Float64, 10)
+const _ambuf = Array{Float64}(10)
 function _am(u::Float64, m::Float64, tol::Float64)
     if u == 0. return 0. end
 
@@ -39,7 +39,6 @@ function am(u::Float64, m::Float64, tol::Float64)
 end
 am(u::Float64, m::Float64) = am(u, m, eps(Float64))
 am(u::Real, m::Real) = am(Float64(u), Float64(m))
-@vectorize_2arg Real am
 
 for (f,a,b,c) in ((:sn, :(sin(phi)),                :(sqrtmu1*s), :(sqrt(mu)*sin(phi))),
                   (:cn, :(cos(phi)),                :(cos(phi)),  :(sqrt(1. - mu*sin(phi)^2))),
@@ -77,10 +76,7 @@ for (p,num) in xn, (q,den) in xn
     if q != :n
         @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
     end
-    @eval begin
-        ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
-        @vectorize_2arg Real $f
-    end
+    @eval ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
 end
 
 end # module

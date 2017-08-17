@@ -71,13 +71,13 @@ for i = 1:size(table17p1,1)
     m = table17p1[i,1]
     k = table17p1[i,2]
     e = table17p1[i,4]
-    @test_approx_eq_eps K(m) k ktol
-    @test_approx_eq_eps E(m) e etol
-    @test_approx_eq_eps F(pi/2,m) k ktol
-    @test_approx_eq_eps E(pi/2,m) e etol
+    @test K(m) ≈ k atol=ktol
+    @test E(m) ≈ e atol=etol
+    @test F(pi/2,m) ≈ k atol=ktol
+    @test E(pi/2,m) ≈ e atol=etol
     a,b = ellipke(m)
-    @test_approx_eq_eps a k ktol
-    @test_approx_eq_eps b e etol
+    @test a ≈ k atol=ktol
+    @test b ≈ e atol=etol
 end
 
 for i = 1:size(table17p1,1)
@@ -90,21 +90,21 @@ for i = 1:size(table17p1,1)
         @test F(pi/2,m) == k
         @test a == k
     else
-        @test_approx_eq_eps K(m) k ktol
-        @test_approx_eq_eps F(pi/2,m) k ktol
-        @test_approx_eq_eps a k ktol
+        @test K(m) ≈ k atol=ktol
+        @test F(pi/2,m) ≈ k atol=ktol
+        @test a ≈ k atol=ktol
     end
-    @test_approx_eq_eps E(m) e etol
-    @test_approx_eq_eps E(pi/2,m) e etol
-    @test_approx_eq_eps b e etol
+    @test E(m) ≈ e atol=etol
+    @test E(pi/2,m) ≈ e atol=etol
+    @test b ≈ e atol=etol
 end
 
-@test_approx_eq K(0) pi/2
-@test_approx_eq K(0.5) (0.25/sqrt(pi))*gamma(0.25)^2
+@test K(0) ≈ pi/2
+@test K(0.5) ≈ (0.25/sqrt(pi))*gamma(0.25)^2
 @test           K(1) == Inf
 
-@test_approx_eq E(0) pi/2
-@test_approx_eq E(1) 1
+@test E(0) ≈ pi/2
+@test E(1) ≈ 1
 
 #                       Abramowitz & Stegun, Table 17.2, p610-11
 #    α          K(α)                K(90-α)               E(α)                E(90-α)
@@ -163,13 +163,13 @@ for i = 1:size(table17p2,1)
     k  = table17p2[i,2]
     e  = table17p2[i,4]
     m  = sind(alpha)^2
-    @test_approx_eq_eps K(m) k tol
-    @test_approx_eq_eps E(m) e tol
-    @test_approx_eq_eps F(pi/2,m) k tol
-    @test_approx_eq_eps E(pi/2,m) e tol
+    @test K(m) ≈ k atol=tol
+    @test E(m) ≈ e atol=tol
+    @test F(pi/2,m) ≈ k atol=tol
+    @test E(pi/2,m) ≈ e atol=tol
     a,b = ellipke(m)
-    @test_approx_eq_eps a k tol
-    @test_approx_eq_eps b e tol
+    @test a ≈ k atol=tol
+    @test b ≈ e atol=tol
 end
 
 # XXX: why isn't tol smaller?
@@ -185,14 +185,14 @@ for i = 1:size(table17p2,1)
         @test F(pi/2,m) == k
         @test a == k
     else
-        @test_approx_eq_eps K(m) k tol
-        @test_approx_eq_eps F(pi/2,m) k tol
-        @test_approx_eq_eps a k tol
+        @test K(m) ≈ k atol=tol
+        @test F(pi/2,m) ≈ k atol=tol
+        @test a ≈ k atol=tol
     end
 
-    @test_approx_eq_eps E(m) e tol
-    @test_approx_eq_eps E(pi/2,m) e tol
-    @test_approx_eq_eps b e tol
+    @test E(m) ≈ e atol=tol
+    @test E(pi/2,m) ≈ e atol=tol
+    @test b ≈ e atol=tol
 end
 
 # F(phi,m) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -370,11 +370,11 @@ for i = 1:size(table17p5,1)
                 @test ellipke(m)[1] == f
             end
         else
-            @test_approx_eq_eps F(phi,m) f 1e-8
-            @test_approx_eq_eps F(-phi,m) -f 1e-8
+            @test F(phi,m) ≈ f atol=1e-8
+            @test F(-phi,m) ≈ -f atol=1e-8
             if phid == 90
-                @test_approx_eq_eps K(m) f 1e-8
-                @test_approx_eq_eps ellipke(m)[1] f 1e-8
+                @test K(m) ≈ f atol=1e-8
+                @test ellipke(m)[1] ≈ f atol=1e-8
             end
         end
     end
@@ -547,37 +547,37 @@ for i = 1:size(table17p6,1)
         phid = 5*(j-2)
         phi = deg2rad(phid)
         e = table17p6[i,j]
-        @test_approx_eq_eps E(phi,m) e 1e-8
-        @test_approx_eq_eps E(-phi,m) -e 1e-8
+        @test E(phi,m) ≈ e atol=1e-8
+        @test E(-phi,m) ≈ -e atol=1e-8
         if phid == 90
-            @test_approx_eq_eps E(m) e 1e-8
-            @test_approx_eq_eps ellipke(m)[2] e 1e-8
+            @test E(m) ≈ e atol=1e-8
+            @test ellipke(m)[2] ≈ e atol=1e-8
         end
     end
 end
 
-@test_approx_eq E(0,0.5) 0
-@test_approx_eq E(0.5,0) 0.5
-@test_approx_eq E(0.5,1) sin(0.5)
+@test E(0,0.5) ≈ 0
+@test E(0.5,0) ≈ 0.5
+@test E(0.5,1) ≈ sin(0.5)
 
-@test_approx_eq F(0,0.5) 0
-@test_approx_eq F(0.5,0) 0.5
-@test_approx_eq F(0.5,1) log(sec(0.5) + tan(0.5))
+@test F(0,0.5) ≈ 0
+@test F(0.5,0) ≈ 0.5
+@test F(0.5,1) ≈ log(sec(0.5) + tan(0.5))
 
 # values from Abramowitz & Stegun, Table 17.2 (p610-611)
 m20 = sind(20)^2
 K20 = 1.62002_58991_24204
 E20 = 1.52379_92052_59774
-@test_approx_eq_eps K(m20) K20 1e-15
-@test_approx_eq_eps E(m20) E20 1e-15
+@test K(m20) ≈ K20 atol=1e-15
+@test E(m20) ≈ E20 atol=1e-15
 
 # values from Abramowitz & Stegun, Table 17.5 (p613-615)
 # values from Abramowitz & Stegun, Table 17.6 (p616-618)
 E2020 = 0.34825_492
 F2020 = 0.34988_016
 for i = -2:2
-    @test_approx_eq_eps E(deg2rad(20+180i), m20) E2020 + 2i*E20 1e-8
-    @test_approx_eq_eps F(deg2rad(20+180i), m20) F2020 + 2i*K20 1e-8
+    @test E(deg2rad(20+180i), m20) ≈ E2020 + 2i*E20 atol=1e-8
+    @test F(deg2rad(20+180i), m20) ≈ F2020 + 2i*K20 atol=1e-8
 end
 
 #                       Abramowitz & Stegun, Table 17.9, p625-6
@@ -674,7 +674,7 @@ for i = 1:size(table17p9,1)
         if x == Inf
             @test x == y
         else
-            @test_approx_eq_eps x y 1e-5*max(x,1.)
+            @test x ≈ y atol=1e-5*max(x,1.)
         end
     end
 end
@@ -686,53 +686,53 @@ u20 = 20*K20/90
 θd2020 = 1.02789_45992/sqrt(secd(20))
 θn2020 = 1.00369_53131
 # sn, cn, dn
-@test_approx_eq_eps Jacobi.sn(u20,m20) θs2020/θn2020 1e-9
-@test_approx_eq_eps Jacobi.cn(u20,m20) θc2020/θn2020 1e-9
-@test_approx_eq_eps Jacobi.dn(u20,m20) θd2020/θn2020 1e-9
+@test Jacobi.sn(u20,m20) ≈ θs2020/θn2020 atol=1e-9
+@test Jacobi.cn(u20,m20) ≈ θc2020/θn2020 atol=1e-9
+@test Jacobi.dn(u20,m20) ≈ θd2020/θn2020 atol=1e-9
 # Jacobi.cd, sd, nd
-@test_approx_eq_eps Jacobi.cd(u20,m20) θc2020/θd2020 1e-9
-@test_approx_eq_eps Jacobi.sd(u20,m20) θs2020/θd2020 1e-9
-@test_approx_eq_eps Jacobi.nd(u20,m20) θn2020/θd2020 1e-9
+@test Jacobi.cd(u20,m20) ≈ θc2020/θd2020 atol=1e-9
+@test Jacobi.sd(u20,m20) ≈ θs2020/θd2020 atol=1e-9
+@test Jacobi.nd(u20,m20) ≈ θn2020/θd2020 atol=1e-9
 # Jacobi.dc, nc, sc
-@test_approx_eq_eps Jacobi.dc(u20,m20) θd2020/θc2020 1e-9
-@test_approx_eq_eps Jacobi.nc(u20,m20) θn2020/θc2020 1e-9
-@test_approx_eq_eps Jacobi.sc(u20,m20) θs2020/θc2020 1e-9
+@test Jacobi.dc(u20,m20) ≈ θd2020/θc2020 atol=1e-9
+@test Jacobi.nc(u20,m20) ≈ θn2020/θc2020 atol=1e-9
+@test Jacobi.sc(u20,m20) ≈ θs2020/θc2020 atol=1e-9
 # Jacobi.ns, ds, cs
-@test_approx_eq_eps Jacobi.ns(u20,m20) θn2020/θs2020 4e-9
-@test_approx_eq_eps Jacobi.ds(u20,m20) θd2020/θs2020 4e-9
-@test_approx_eq_eps Jacobi.cs(u20,m20) θc2020/θs2020 4e-9
+@test Jacobi.ns(u20,m20) ≈ θn2020/θs2020 atol=4e-9
+@test Jacobi.ds(u20,m20) ≈ θd2020/θs2020 atol=4e-9
+@test Jacobi.cs(u20,m20) ≈ θc2020/θs2020 atol=4e-9
 # ellipj
 s,c,d = ellipj(u20,m20)
-@test_approx_eq_eps s θs2020/θn2020 1e-9
-@test_approx_eq_eps c θc2020/θn2020 1e-9
-@test_approx_eq_eps d θd2020/θn2020 1e-9
+@test s ≈ θs2020/θn2020 atol=1e-9
+@test c ≈ θc2020/θn2020 atol=1e-9
+@test d ≈ θd2020/θn2020 atol=1e-9
 
 for u = -1.:0.21:1.
-    @test_approx_eq Jacobi.am(u,0) u
-    @test_approx_eq Jacobi.sn(u,0) sin(u)
-    @test_approx_eq Jacobi.cn(u,0) cos(u)
-    @test_approx_eq Jacobi.dn(u,0) 1.
-    @test_approx_eq Jacobi.cd(u,0) cos(u)
-    @test_approx_eq Jacobi.sd(u,0) sin(u)
-    @test_approx_eq Jacobi.nd(u,0) 1.
-    @test_approx_eq Jacobi.dc(u,0) sec(u)
-    @test_approx_eq Jacobi.nc(u,0) sec(u)
-    @test_approx_eq Jacobi.sc(u,0) tan(u)
-    @test_approx_eq Jacobi.ns(u,0) csc(u)
-    @test_approx_eq Jacobi.ds(u,0) csc(u)
-    @test_approx_eq Jacobi.cs(u,0) cot(u)
+    @test Jacobi.am(u,0) ≈ u
+    @test Jacobi.sn(u,0) ≈ sin(u)
+    @test Jacobi.cn(u,0) ≈ cos(u)
+    @test Jacobi.dn(u,0) ≈ 1.
+    @test Jacobi.cd(u,0) ≈ cos(u)
+    @test Jacobi.sd(u,0) ≈ sin(u)
+    @test Jacobi.nd(u,0) ≈ 1.
+    @test Jacobi.dc(u,0) ≈ sec(u)
+    @test Jacobi.nc(u,0) ≈ sec(u)
+    @test Jacobi.sc(u,0) ≈ tan(u)
+    @test Jacobi.ns(u,0) ≈ csc(u)
+    @test Jacobi.ds(u,0) ≈ csc(u)
+    @test Jacobi.cs(u,0) ≈ cot(u)
 
-    @test_approx_eq Jacobi.am(u,1) atan(sinh(u))
-    @test_approx_eq Jacobi.sn(u,1) tanh(u)
-    @test_approx_eq Jacobi.cn(u,1) sech(u)
-    @test_approx_eq Jacobi.dn(u,1) sech(u)
-    @test_approx_eq Jacobi.cd(u,1) 1.
-    @test_approx_eq Jacobi.sd(u,1) sinh(u)
-    @test_approx_eq Jacobi.nd(u,1) cosh(u)
-    @test_approx_eq Jacobi.dc(u,1) 1.
-    @test_approx_eq Jacobi.nc(u,1) cosh(u)
-    @test_approx_eq Jacobi.sc(u,1) sinh(u)
-    @test_approx_eq Jacobi.ns(u,1) coth(u)
-    @test_approx_eq Jacobi.ds(u,1) csch(u)
-    @test_approx_eq Jacobi.cs(u,1) csch(u)
+    @test Jacobi.am(u,1) ≈ atan(sinh(u))
+    @test Jacobi.sn(u,1) ≈ tanh(u)
+    @test Jacobi.cn(u,1) ≈ sech(u)
+    @test Jacobi.dn(u,1) ≈ sech(u)
+    @test Jacobi.cd(u,1) ≈ 1.
+    @test Jacobi.sd(u,1) ≈ sinh(u)
+    @test Jacobi.nd(u,1) ≈ cosh(u)
+    @test Jacobi.dc(u,1) ≈ 1.
+    @test Jacobi.nc(u,1) ≈ cosh(u)
+    @test Jacobi.sc(u,1) ≈ sinh(u)
+    @test Jacobi.ns(u,1) ≈ coth(u)
+    @test Jacobi.ds(u,1) ≈ csch(u)
+    @test Jacobi.cs(u,1) ≈ csch(u)
 end
