@@ -7,6 +7,26 @@ if !isdefined(:deg2rad)
     const deg2rad = degrees2radians
 end
 
+### NaNs
+
+@test E(NaN) === NaN
+@test K(NaN) === NaN
+
+@test E(0,NaN) === NaN
+@test E(NaN,0) === NaN
+@test E(NaN,NaN) === NaN
+
+@test F(0,NaN) === NaN
+@test F(NaN,0) === NaN
+@test F(NaN,NaN) === NaN
+
+@test Pi(0,0,NaN) === NaN
+@test Pi(0,NaN,0) === NaN
+@test Pi(NaN,0,0) === NaN
+@test Pi(NaN,NaN,NaN) === NaN
+
+@test ellipke(NaN) === (NaN,NaN)
+
 ### K(m), E(m), ellipke(m), F(pi/2,m), E(pi/2,m) ###
 
 # values from Abramowitz & Stegun, Table 17.1 (p608-609)
@@ -101,7 +121,7 @@ end
 
 @test K(0) ≈ pi/2
 @test K(0.5) ≈ (0.25/sqrt(pi))*gamma(0.25)^2
-@test           K(1) == Inf
+@test K(1) == Inf
 
 @test E(0) ≈ pi/2
 @test E(1) ≈ 1

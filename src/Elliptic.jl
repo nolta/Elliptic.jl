@@ -14,6 +14,7 @@ include("jacobi.jl")
 include("slatec.jl")
 
 function E(phi::Float64, m::Float64)
+    if isnan(phi) || isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError()) end
     if abs(phi) > pi/2
         phi2 = phi + pi/2
@@ -38,6 +39,7 @@ end
 E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
 
 function ellipke(m::Float64)
+    if isnan(m) return NaN, NaN end
     if m < 0. || m > 1. throw(DomainError()) end
     if m == 1. return Inf, 1. end
     y = 1. - m
@@ -62,6 +64,7 @@ function rawF(sinphi::Float64, m::Float64)
 end
 
 function F(phi::Float64, m::Float64)
+    if isnan(phi) || isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError()) end
     if abs(phi) > pi/2
         # Abramowitz & Stegun (17.4.3)
@@ -73,6 +76,7 @@ end
 F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
 
 function K(m::Float64)
+    if isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError()) end
     if m == 1. return Inf end
     drf,ierr = SLATEC.DRF(0., 1. - m, 1.)
@@ -83,6 +87,7 @@ K(x::Float32) = Float32(K(Float64(x)))
 K(x::Real) = K(Float64(x))
 
 function Pi(n::Float64, phi::Float64, m::Float64)
+    if isnan(n) || isnan(phi) || isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError()) end
     sinphi = sin(phi)
     sinphi2 = sinphi^2
