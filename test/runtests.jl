@@ -3,10 +3,6 @@ using Base.Test
 include("../src/Elliptic.jl")
 using Elliptic
 
-if !isdefined(:deg2rad)
-    const deg2rad = degrees2radians
-end
-
 ### NaNs
 
 @test E(NaN) === NaN
@@ -688,7 +684,7 @@ for i = 1:size(table17p9,1)
     alpha = table17p9[i,2]
     m = sind(alpha)^2
     for j = 3:size(table17p9,2)
-        phi = 15.*(j-3)
+        phi = 15.0*(j-3)
         x = table17p9[i,j]
         y = Pi(n, deg2rad(phi), m)
         if x == Inf

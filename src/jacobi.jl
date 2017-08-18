@@ -10,7 +10,7 @@ function _am(u::Float64, m::Float64, tol::Float64)
     sqrt_tol = sqrt(tol)
     if m < sqrt_tol
         # A&S 16.13.4
-        return u - 0.25*m*(u - 0.5*sin(2.*u))
+        return u - 0.25*m*(u - 0.5*sin(2.0*u))
     end
     m1 = 1. - m
     if m1 < sqrt_tol
@@ -52,7 +52,7 @@ for (f,a,b,c) in ((:sn, :(sin(phi)),                :(sqrtmu1*s), :(sqrt(mu)*sin
                 phi = _am(u,m)
                 return $a
             elseif lt0
-                mu1 = 1./(1. - m)
+                mu1 = 1.0/(1. - m)
                 mu = -m*mu1
                 sqrtmu1 = sqrt(mu1)
                 v = u/sqrtmu1

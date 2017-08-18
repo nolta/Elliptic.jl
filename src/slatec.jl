@@ -35,12 +35,12 @@ const D1MACH5 = log10(2.)
 
 function DRF(X::Float64, Y::Float64, Z::Float64)
 
-    const ERRTOL = (4.0*D1MACH3)^(1.0/6.0)
-    const LOLIM  = 5.0 * D1MACH1
-    const UPLIM  = D1MACH2/5.0
-    const C1 = 1.0/24.0
-    const C2 = 3.0/44.0
-    const C3 = 1.0/14.0
+    ERRTOL = (4.0*D1MACH3)^(1.0/6.0)
+    LOLIM  = 5.0 * D1MACH1
+    UPLIM  = D1MACH2/5.0
+    C1 = 1.0/24.0
+    C2 = 3.0/44.0
+    C3 = 1.0/14.0
 
     ans = 0.0
     if min(X,Y,Z) < 0.0
@@ -114,15 +114,15 @@ end
 
 function DRD(X::Float64, Y::Float64, Z::Float64)
 
-    const ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
-    const LOLIM  = 2.0/(D1MACH2)^(2.0/3.0)
-    const TUPLIM = D1MACH1^(1.0E0/3.0E0)
-    const TUPLIM = (0.10*ERRTOL)^(1.0E0/3.0E0)/TUPLIM
-    const UPLIM  = TUPLIM^2.0
-    const C1 = 3.0/14.0
-    const C2 = 1.0/6.0
-    const C3 = 9.0/22.0
-    const C4 = 3.0/26.0
+    ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
+    LOLIM  = 2.0/(D1MACH2)^(2.0/3.0)
+    TUPLIM = D1MACH1^(1.0E0/3.0E0)
+    TUPLIM = (0.10*ERRTOL)^(1.0E0/3.0E0)/TUPLIM
+    UPLIM  = TUPLIM^2.0
+    C1 = 3.0/14.0
+    C2 = 1.0/6.0
+    C3 = 9.0/22.0
+    C4 = 3.0/26.0
 
     ans = 0.0
     if min(X,Y) < 0.0
@@ -202,11 +202,11 @@ end
 
 function DRC(X::Float64, Y::Float64)
 
-    const ERRTOL = (D1MACH3/16.0)^(1.0/6.0)
-    const LOLIM  = 5.0 * D1MACH1
-    const UPLIM  = D1MACH2 / 5.0
-    const C1 = 1.0/7.0
-    const C2 = 9.0/22.0
+    ERRTOL = (D1MACH3/16.0)^(1.0/6.0)
+    LOLIM  = 5.0 * D1MACH1
+    UPLIM  = D1MACH2 / 5.0
+    C1 = 1.0/7.0
+    C2 = 9.0/22.0
 
     ans = 0.0
     if X < 0.0 || Y <= 0.0
@@ -268,14 +268,14 @@ end
 
 function DRJ(X::Float64, Y::Float64, Z::Float64, P::Float64)
 
-    const ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
-    const LOLIM  = (5.0 * D1MACH1)^(1.0/3.0)
-    const UPLIM  = 0.30*( D1MACH2 / 5.0)^(1.0/3.0)
+    ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
+    LOLIM  = (5.0 * D1MACH1)^(1.0/3.0)
+    UPLIM  = 0.30*( D1MACH2 / 5.0)^(1.0/3.0)
 
-    const C1 = 3.0/14.0
-    const C2 = 1.0/3.0
-    const C3 = 3.0/22.0
-    const C4 = 3.0/26.0
+    C1 = 3.0/14.0
+    C2 = 1.0/3.0
+    C3 = 3.0/22.0
+    C4 = 3.0/26.0
 
     ans = 0.0
     if min(X,Y,Z) < 0.0
