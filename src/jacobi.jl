@@ -3,7 +3,7 @@ module Jacobi
 export am, sn, cn, dn, cd, sd, nd, dc, nc, sc, ns, ds, cs
 
 # Abramowitz & Stegun, section 16.4, p571
-const _ambuf = Array{Float64}(10)
+const _ambuf = Array{Float64}(undef, 10)
 function _am(u::Float64, m::Float64, tol::Float64)
     if u == 0. return 0. end
 
