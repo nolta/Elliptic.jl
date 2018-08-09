@@ -2,8 +2,8 @@ module SLATEC
 
 export DRC, DRD, DRF, DRJ
 
-const D1MACH1 = realmin(Float64)
-const D1MACH2 = realmax(Float64)
+const D1MACH1 = floatmin(Float64)
+const D1MACH2 = floatmax(Float64)
 const D1MACH3 = eps(Float64)/2
 const D1MACH4 = eps(Float64)
 const D1MACH5 = log10(2.)
