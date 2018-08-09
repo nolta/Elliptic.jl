@@ -1,6 +1,5 @@
 using Test
-
-include("../src/Elliptic.jl")
+using SpecialFunctions: gamma
 using Elliptic
 
 ### NaNs
