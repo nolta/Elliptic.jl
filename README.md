@@ -141,8 +141,6 @@ Installation
 ------------
 
 ```jlcon
-julia> Pkg.update()
-
 julia> Pkg.add("Elliptic")
 ```
 
