@@ -105,6 +105,7 @@ function Pi(n::Float64, phi::Float64, m::Float64)
     NaN
 end
 Pi(n::Real, phi::Real, m::Real) = Pi(Float64(n), Float64(phi), Float64(m))
+Π = Pi
 
 function ellipj(u::Float64, m::Float64, tol::Float64)
     phi = Jacobi.am(u, m, tol)

@@ -33,8 +33,16 @@ function _am(u::Float64, m::Float64, tol::Float64)
     phi
 end
 _am(u::Float64, m::Float64) = _am(u, m, eps(Float64))
+
+"""
+    am(u::Real, m::Real, [tol::Real=eps(Float64)])
+
+Returns amplitude, φ, such that u = F(φ | m)
+
+Landen sequence with convergence to `tol` used if `√(tol) ≤ m ≤ 1 - √(tol)`
+"""
 function am(u::Float64, m::Float64, tol::Float64)
-    if m < 0. || m > 1. throw(DomainError()) end
+    (m < 0. || m > 1.) && throw(DomainError(m, "am requires m ∈ [0, 1]"))
     _am(u, m, tol)
 end
 am(u::Float64, m::Float64) = am(u, m, eps(Float64))
@@ -71,12 +79,19 @@ end
 
 xn = ((:s,:(sn(u,m))), (:c,:(cn(u,m))), (:d,:(dn(u,m))), (:n,:(1.)))
 for (p,num) in xn, (q,den) in xn
-    if p == q continue end
-    f = Symbol(string(p,q))
+     if p == q continue end
+    f = Symbol(p, q)
     if q != :n
         @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
     end
-    @eval ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
+    @eval begin
+        """
+            $($f)(u::Real, m::Real)
+
+        Compute the Jacobi elliptic function $($f)(u | m)
+        """
+        ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
+    end
 end
 
 end # module
