@@ -4,9 +4,9 @@ Elliptic Special Functions for Julia
 [![Build Status](https://travis-ci.org/nolta/Elliptic.jl.svg?branch=master)](https://travis-ci.org/nolta/Elliptic.jl)
 
 This julia package implements
-[elliptic integrals](https://en.wikipedia.org/wiki/Elliptic_integral) and
+[elliptic integrals](https://dlmf.nist.gov/19.2) and
 (in the `Jacobi` sub-module) the
-[Jacobi elliptic functions](https://en.wikipedia.org/wiki/Jacobi_elliptic_functions).
+[Jacobi elliptic functions](https://dlmf.nist.gov/22.2).
 
 Elliptic Integrals
 ------------------
