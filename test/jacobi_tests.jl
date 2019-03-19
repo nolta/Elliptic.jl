@@ -6,8 +6,11 @@
     using Jacobi
 
     @testset "Abramowitz & Stegun, Table 16.1 (p582-583)" begin
+    @testset "Abramowitz & Stegun, Table 16.1 (p582-583)" begin
         # from Abramowitz & Stegun, Table 17.2 (p610-611)
+        m20 = sind(20)^2
         K20 = 1.62002_58991_24204
+        E20 = 1.52379_92052_59774
 
         u20 = 20*K20/90
         θs2020 = 0.35274_9211
