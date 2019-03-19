@@ -4,8 +4,43 @@
 
 @testset "Jacobi" begin
     using Jacobi
+    using DelimitedFiles: readdlm
 
-    @testset "Abramowitz & Stegun, Table 16.1 (p582-583)" begin
+    @testset "Abramowitz & Stegun Table 16.1" begin
+        # table 17.2
+        αs_17_2 = readdlm("data/table_17_2/alpha.csv")
+        αs_17_2_lut = Dict(zip(αs_17_2, 1:length(αs_17_2)))
+        Ks = readdlm("data/table_17_2/K.csv")
+
+        # table 16.1
+        αs = readdlm("data/table_16_1/alpha.csv")
+        ϵs = readdlm("data/table_16_1/epsilon.csv")
+        θss = readdlm("data/table_16_1/theta_s.csv", ',')
+        θns = readdlm("data/table_16_1/theta_n.csv", ',')
+
+       @testset "α = $α" for (i, α) in enumerate(αs)
+            @testset "ϵ = $ϵ" for (j, ϵ) in enumerate(ϵs)
+                ϵ₁ = 90 - ϵ
+                j₁ = length(ϵs) - i + 1
+
+                m = sind(α)^2
+                K = Ks[αs_17_2_lut[α]]
+                u = ϵ * K / 90
+                denom = sqrt(secd(α))
+
+                θs = θss[j, i]
+                θn = θns[j, i]
+                θc = θss[j₁, i]/denom
+                θd = θns[j₁, i]/denom
+
+                @test sn(u, m) ≈ θs/θn atol=1e-9
+                @test cn(u, m) ≈ θc/θn atol=1e-9
+                @test dn(u, m) ≈ θd/θn atol=1e-9
+                @test nn(u, m) ≈ 1.0
+            end
+        end
+    end
+
     @testset "Abramowitz & Stegun, Table 16.1 (p582-583)" begin
         # from Abramowitz & Stegun, Table 17.2 (p610-611)
         m20 = sind(20)^2
@@ -48,7 +83,7 @@
         @test d ≈ θd2020/θn2020 atol=1e-9
     end
 
-    @testset "u = $u" for u in -1.:0.21:1.
+    @testset "u = $u" for u in -1.:0.21:1.0
         @test am(u,0) ≈ u
         @test sn(u,0) ≈ sin(u)
         @test cn(u,0) ≈ cos(u)
