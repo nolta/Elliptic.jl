@@ -1,6 +1,10 @@
 module Jacobi
 
-export am, sn, cn, dn, cd, sd, nd, dc, nc, sc, ns, ds, cs
+export am,
+    sn, cn, dn, nn,
+    sd, cd, dd, nd,
+    sc, cc, dc, nc,
+    ss, cs, ds, ns
 
 # Abramowitz & Stegun, section 16.4, p571
 const _ambuf = Array{Float64}(undef, 10)
@@ -79,18 +83,19 @@ end
 
 xn = ((:s,:(sn(u,m))), (:c,:(cn(u,m))), (:d,:(dn(u,m))), (:n,:(1.)))
 for (p,num) in xn, (q,den) in xn
-    if p == q continue end
     f = Symbol(p, q)
-    if q != :n
-        @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
-    end
+    body = (p == q) ? 1.0 : :(($f)(Float64(u), Float64(m)))
     @eval begin
         """
             $($f)(u::Real, m::Real)
 
         Compute the Jacobi elliptic function $($f)(u | m)
         """
-        ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
+        ($f)(u::Real, m::Real) = $(body)
+    end
+
+    if q != :n
+        @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
     end
 end
 

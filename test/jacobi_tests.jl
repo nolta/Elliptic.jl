@@ -12,22 +12,30 @@
         θc2020 = 0.96935_0025/sqrt(secd(20))
         θd2020 = 1.02789_45992/sqrt(secd(20))
         θn2020 = 1.00369_53131
-        # sn, cn, dn
+        # sn, cn, dn, nn
         @test Jacobi.sn(u20,m20) ≈ θs2020/θn2020 atol=1e-9
         @test Jacobi.cn(u20,m20) ≈ θc2020/θn2020 atol=1e-9
         @test Jacobi.dn(u20,m20) ≈ θd2020/θn2020 atol=1e-9
-        # Jacobi.cd, sd, nd
+        @test Jacobi.nn(u20, m20) ≈ 1.0
+
+        # Jacobi.cd, sd, nd, dd
         @test Jacobi.cd(u20,m20) ≈ θc2020/θd2020 atol=1e-9
         @test Jacobi.sd(u20,m20) ≈ θs2020/θd2020 atol=1e-9
         @test Jacobi.nd(u20,m20) ≈ θn2020/θd2020 atol=1e-9
-        # Jacobi.dc, nc, sc
+        @test Jacobi.dd(u20, m20) ≈ 1.0
+
+        # Jacobi.dc, nc, sc, cc
         @test Jacobi.dc(u20,m20) ≈ θd2020/θc2020 atol=1e-9
         @test Jacobi.nc(u20,m20) ≈ θn2020/θc2020 atol=1e-9
         @test Jacobi.sc(u20,m20) ≈ θs2020/θc2020 atol=1e-9
-        # Jacobi.ns, ds, cs
+        @test Jacobi.cc(u20, m20) ≈ 1.0
+
+        # Jacobi.ns, ds, cs, ss
         @test Jacobi.ns(u20,m20) ≈ θn2020/θs2020 atol=4e-9
         @test Jacobi.ds(u20,m20) ≈ θd2020/θs2020 atol=4e-9
         @test Jacobi.cs(u20,m20) ≈ θc2020/θs2020 atol=4e-9
+        @test Jacobi.ss(u20, m20) ≈ 1.0
+
         # ellipj
         s,c,d = ellipj(u20,m20)
         @test s ≈ θs2020/θn2020 atol=1e-9
@@ -40,29 +48,37 @@
         @test Jacobi.sn(u,0) ≈ sin(u)
         @test Jacobi.cn(u,0) ≈ cos(u)
         @test Jacobi.dn(u,0) ≈ 1.
+        @test Jacobi.nn(u,0) ≈ 1.
         @test Jacobi.cd(u,0) ≈ cos(u)
         @test Jacobi.sd(u,0) ≈ sin(u)
         @test Jacobi.nd(u,0) ≈ 1.
+        @test Jacobi.dd(u,0) ≈ 1.
         @test Jacobi.dc(u,0) ≈ sec(u)
         @test Jacobi.nc(u,0) ≈ sec(u)
         @test Jacobi.sc(u,0) ≈ tan(u)
+        @test Jacobi.cc(u,0) ≈ 1.
         @test Jacobi.ns(u,0) ≈ csc(u)
         @test Jacobi.ds(u,0) ≈ csc(u)
         @test Jacobi.cs(u,0) ≈ cot(u)
+        @test Jacobi.ss(u,0) ≈ 1.
 
         @test Jacobi.am(u,1) ≈ atan(sinh(u))
         @test Jacobi.sn(u,1) ≈ tanh(u)
         @test Jacobi.cn(u,1) ≈ sech(u)
         @test Jacobi.dn(u,1) ≈ sech(u)
+        @test Jacobi.nn(u,1) ≈ 1.
         @test Jacobi.cd(u,1) ≈ 1.
         @test Jacobi.sd(u,1) ≈ sinh(u)
         @test Jacobi.nd(u,1) ≈ cosh(u)
+        @test Jacobi.dd(u,1) ≈ 1.
         @test Jacobi.dc(u,1) ≈ 1.
         @test Jacobi.nc(u,1) ≈ cosh(u)
         @test Jacobi.sc(u,1) ≈ sinh(u)
+        @test Jacobi.cc(u,1) ≈ 1.
         @test Jacobi.ns(u,1) ≈ coth(u)
         @test Jacobi.ds(u,1) ≈ csch(u)
         @test Jacobi.cs(u,1) ≈ csch(u)
+        @test Jacobi.ss(u,1) ≈ 1.
     end
 
     @testset "errors" begin
