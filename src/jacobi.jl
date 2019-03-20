@@ -84,17 +84,18 @@ end
 xn = ((:s,:(sn(u,m))), (:c,:(cn(u,m))), (:d,:(dn(u,m))), (:n,:(1.)))
 for (p,num) in xn, (q,den) in xn
     f = Symbol(p, q)
-    body = (p == q) ? 1.0 : :(($f)(Float64(u), Float64(m)))
     @eval begin
         """
             $($f)(u::Real, m::Real)
 
         Compute the Jacobi elliptic function $($f)(u | m)
         """
-        ($f)(u::Real, m::Real) = $(body)
+        ($f)(u::Real, m::Real) = ($f)(Float64(u), Float64(m))
     end
 
-    if q != :n
+    if (p == q)
+        @eval ($f)(::Float64, ::Float64) = 1.0
+    elseif (q != :n)
         @eval ($f)(u::Float64, m::Float64) = ($num)/($den)
     end
 end
