@@ -4,19 +4,22 @@
 
 @testset "Jacobi" begin
     @testset "Abramowitz & Stegun Table 16.1" begin
-        # table 17.2
-        αs_17_2 = readdlm("data/table_17_2/alpha.csv")
-        αs_17_2_lut = Dict(zip(αs_17_2, 1:length(αs_17_2)))
-        Ks = readdlm("data/table_17_2/K.csv")
-
+        dataloc = "data/"
         # table 16.1
-        αs = readdlm("data/table_16_1/alpha.csv")
-        ϵs = readdlm("data/table_16_1/epsilon.csv")
-        θss = readdlm("data/table_16_1/theta_s.csv", ',')
-        θns = readdlm("data/table_16_1/theta_n.csv", ',')
+        t161, _ = readdlm(joinpath(dataloc, "table_16_1.csv"), ',', header=true)
+        # table 17.2
+        t172, _ = readdlm(joinpath(dataloc, "table_17_2.csv"), ',', header=true)
+
+        K_lut = Dict(zip(t172[:, 1], t172[:, 2]))
+
+        # data vary first by ϵ ∈ 0:5:90 then α ∈ 0:5:85
+        αs = 0:5:85
+        ϵs = 0:5:90
+        θss = reshape(t161[:, 3], length(ϵs), length(αs))
+        θns = reshape(t161[:, 4], length(ϵs), length(αs))
 
         @testset "α = $α" for (i, α) in enumerate(αs)
-            K = Ks[αs_17_2_lut[α]]
+            K = K_lut[α]
             m = sind(α)^2
             denom = sqrt(secd(α))
 
