@@ -9,6 +9,7 @@ export Jacobi
 export ellipj, ellipke
 
 include("jacobi.jl")
+include("landen.jl")
 include("slatec.jl")
 
 function E(phi::Float64, m::Float64)

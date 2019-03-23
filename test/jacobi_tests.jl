@@ -4,7 +4,7 @@
 
 @testset "Jacobi" begin
     @testset "Abramowitz & Stegun Table 16.1" begin
-        dataloc = "data/"
+        dataloc = "data/ab"
         # table 16.1
         t161, _ = readdlm(joinpath(dataloc, "table_16_1.csv"), ',', header=true)
         # table 17.2

@@ -3,6 +3,9 @@ using SpecialFunctions: gamma
 using Elliptic
 using DelimitedFiles: readdlm
 
+include("jacobi_tests.jl")
+include("landen_tests.jl")
+
 @testset "NaNs" begin
     @test E(NaN) === NaN
     @test K(NaN) === NaN
@@ -703,5 +706,3 @@ end
         end
     end
 end
-
-include("jacobi_tests.jl")
