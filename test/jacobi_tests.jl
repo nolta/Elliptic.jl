@@ -3,47 +3,71 @@
 #
 
 @testset "Jacobi" begin
-    @testset "Abramowitz & Stegun, Table 16.1 (p582-583)" begin
-        # from Abramowitz & Stegun, Table 17.2 (p610-611)
-        K20 = 1.62002_58991_24204
+    @testset "Abramowitz & Stegun Table 16.1" begin
+        dataloc = "data/"
+        # table 16.1
+        t161, _ = readdlm(joinpath(dataloc, "table_16_1.csv"), ',', header=true)
+        # table 17.2
+        t172, _ = readdlm(joinpath(dataloc, "table_17_2.csv"), ',', header=true)
 
-        u20 = 20*K20/90
-        θs2020 = 0.35274_9211
-        θc2020 = 0.96935_0025/sqrt(secd(20))
-        θd2020 = 1.02789_45992/sqrt(secd(20))
-        θn2020 = 1.00369_53131
-        # sn, cn, dn, nn
-        @test Jacobi.sn(u20,m20) ≈ θs2020/θn2020 atol=1e-9
-        @test Jacobi.cn(u20,m20) ≈ θc2020/θn2020 atol=1e-9
-        @test Jacobi.dn(u20,m20) ≈ θd2020/θn2020 atol=1e-9
-        @test Jacobi.nn(u20, m20) ≈ 1.0
+        K_lut = Dict(zip(t172[:, 1], t172[:, 2]))
 
-        # Jacobi.cd, sd, nd, dd
-        @test Jacobi.cd(u20,m20) ≈ θc2020/θd2020 atol=1e-9
-        @test Jacobi.sd(u20,m20) ≈ θs2020/θd2020 atol=1e-9
-        @test Jacobi.nd(u20,m20) ≈ θn2020/θd2020 atol=1e-9
-        @test Jacobi.dd(u20, m20) ≈ 1.0
+        # data vary first by ϵ ∈ 0:5:90 then α ∈ 0:5:85
+        αs = 0:5:85
+        ϵs = 0:5:90
+        θss = reshape(t161[:, 3], length(ϵs), length(αs))
+        θns = reshape(t161[:, 4], length(ϵs), length(αs))
 
-        # Jacobi.dc, nc, sc, cc
-        @test Jacobi.dc(u20,m20) ≈ θd2020/θc2020 atol=1e-9
-        @test Jacobi.nc(u20,m20) ≈ θn2020/θc2020 atol=1e-9
-        @test Jacobi.sc(u20,m20) ≈ θs2020/θc2020 atol=1e-9
-        @test Jacobi.cc(u20, m20) ≈ 1.0
+        @testset "α = $α" for (i, α) in enumerate(αs)
+            K = K_lut[α]
+            m = sind(α)^2
+            denom = sqrt(secd(α))
 
-        # Jacobi.ns, ds, cs, ss
-        @test Jacobi.ns(u20,m20) ≈ θn2020/θs2020 atol=4e-9
-        @test Jacobi.ds(u20,m20) ≈ θd2020/θs2020 atol=4e-9
-        @test Jacobi.cs(u20,m20) ≈ θc2020/θs2020 atol=4e-9
-        @test Jacobi.ss(u20, m20) ≈ 1.0
+            @testset "ϵ = $ϵ" for (j, ϵ) in enumerate(ϵs)
+                j₁ = length(ϵs) - j + 1
+                ϵ₁ = ϵs[j₁]
+                u = ϵ * K / 90
 
-        # ellipj
-        s,c,d = ellipj(u20,m20)
-        @test s ≈ θs2020/θn2020 atol=1e-9
-        @test c ≈ θc2020/θn2020 atol=1e-9
-        @test d ≈ θd2020/θn2020 atol=1e-9
+                θs = θss[j, i]
+                θn = θns[j, i]
+                θc = θss[j₁, i]/denom
+                θd = θns[j₁, i]/denom
+
+                @test Jacobi.sn(u, m) ≈ θs / θn atol=2.5e-9
+                @test Jacobi.cn(u, m) ≈ θc / θn atol=2.5e-9
+                @test Jacobi.dn(u, m) ≈ θd / θn atol=2.5e-9
+                @test Jacobi.nn(u, m) == 1.0
+
+                @test Jacobi.sd(u, m) ≈ θs / θd atol=2.5e-9
+                @test Jacobi.cd(u, m) ≈ θc / θd atol=2.5e-9
+                @test Jacobi.dd(u, m) == 1.0
+                @test Jacobi.nd(u, m) ≈ θn / θd atol=2.5e-9
+
+                @test Jacobi.cc(u, m) == 1.0
+                if ϵ != 90
+                    # very sensitive around u = K,
+                    # estimate of K(0) = pi/2 + 4e-9, so cosine causes errors
+                    # also, errors build up in ϵ ≥75°, so lower tolerences for that
+                    @test Jacobi.sc(u, m) ≈ θs / θc atol=1e-7
+                    @test Jacobi.dc(u, m) ≈ θd / θc atol=1e-7
+                    @test Jacobi.nc(u, m) ≈ θn / θc atol=1e-7
+                end
+
+                @test Jacobi.ss(u, m) == 1.0
+                @test Jacobi.cs(u, m) ≈ θc / θs atol=5.5e-8
+                @test Jacobi.ds(u, m) ≈ θd / θs atol=5.5e-8
+                @test Jacobi.ns(u, m) ≈ θn / θs atol=5.5e-8
+
+                # ellipj
+                s, c, d = ellipj(u, m)
+                @test s ≈ θs / θn atol=1e-9
+                @test c ≈ θc / θn atol=1e-9
+                @test d ≈ θd / θn atol=1e-9
+            end
+        end
     end
 
-    @testset "u = $u" for u in -1.:0.21:1.
+    @testset "u = $u" for u in -1.:0.21:1.0
         @test Jacobi.am(u,0) ≈ u
         @test Jacobi.sn(u,0) ≈ sin(u)
         @test Jacobi.cn(u,0) ≈ cos(u)
