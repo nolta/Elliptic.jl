@@ -26,7 +26,7 @@
     end
 
     @testset "$(f)" for f in ["table1", "table2"]
-        # tables go to very high tol, so reduce eps here to match
+        # tables go to 9 digits, so reduce eps here to match
         ks = first( readdlm(joinpath("data/papers/ow", "$f.csv"), ',', header=true) )[:, 2]
         k′s = Landen._k′.(ks)
         k = ks[1]

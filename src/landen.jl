@@ -5,10 +5,10 @@ module Landen
 
 export LandenSeq, landenseq, NonConvergedLandenSeq
 
-const Maybe{T} = Union{Missing, T}
+const Maybe{T} = Union{Nothing, T}
 
 #
-# Landen and Sequence
+# Landen Sequence
 #
 
 #Returns a tuple of kₙs in descending (ascending) Landen sequence where K′ₙ/Kₙ doubles (halves)
@@ -29,7 +29,7 @@ struct LandenSeq{N, T<:Union{AbstractFloat, Complex{<:AbstractFloat}}}
     k′s::NTuple{N, T}
 
     LandenSeq(U::Type) = new{0, U}((), ())
-    function LandenSeq(k::Number, k′::Maybe{Number}=missing; N=10, ktol=_default_tol(k),
+    function LandenSeq(k::Number, k′::Maybe{Number}=nothing; N=10, ktol=_default_tol(k),
             descending=(k ≤ 1/sqrt(2)))
         k = float(k)
         T = typeof(k)
@@ -37,7 +37,8 @@ struct LandenSeq{N, T<:Union{AbstractFloat, Complex{<:AbstractFloat}}}
         ka = isreal(k) ? k : abs(k)
         (0 ≤ ka ≤ 1) || return LandenSeq(T)
 
-        ismissing(k′) && (k′ = _k′(k))
+        # cant compute before checking value
+        isnothing(k′) && (k′ = _k′(k))
 
         # check if already within range
         if (descending && (abs(k) ≤ ktol)) || (!descending && (abs(k′) ≤ ktol))
@@ -57,6 +58,8 @@ struct LandenSeq{N, T<:Union{AbstractFloat, Complex{<:AbstractFloat}}}
         n = 0
         for i in 2:(N+1)
             k, k′ = _desc_landen_kernel(k, k′)
+            # dirty hack
+            # k, k′ = (k, k′) ./ hypot(k, k′)
             ks[i], k′s[i] = k, k′
 
             if abs(k) ≤ ktol # _converged(k, k′, ktol, descending)
@@ -96,15 +99,23 @@ const _kmid = 1/sqrt(2)
 ## TODO eval stablity and error accumulation here
 # esp descending
 
+
 # descending landen iteration k → 0
+# not accuarte for k ≈ 1
 @inline function _desc_landen_kernel(k, k′=_k′(k))
-    k₁ = (k / (1 + k′))^2
-    return (k₁, _k′(k₁))
+    if k ≤ eps(typeof(k))^(1/5)
+        kk = k^2
+        # taylor series expansions around k = 0
+        return (1/4*kk*(1 + 1/2*kk*(1 + 5/8*kk*(1 + 7/2*kk))),
+                (1 - kk^2/32*(1 - kk*(1 - 57/64*kk))))
+    else
+        return (k^2/(1+k′)^2, 2*sqrt(k′)/(1+k′))
+    end
 end
 
 # ascending landen iteration k → 1
 #  ignored second argument to match `desc_landen_kernel` call
-@inline _asc_landen_kernel(k, _=0) = (2*sqrt(k)/(1+k), (1-k)/(1+k))
+@inline _asc_landen_kernel(k, k′) = reverse(_desc_landen_kernel(k′, k))
 
 """
     landenseq(k::Number; N::Int=10, ktol=eps(k), descending=true)
