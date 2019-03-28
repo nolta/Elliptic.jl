@@ -38,7 +38,7 @@ struct LandenSeq{N, T<:Union{AbstractFloat, Complex{<:AbstractFloat}}}
         (0 ≤ ka ≤ 1) || return LandenSeq(T)
 
         # cant compute before checking value
-        isnothing(k′) && (k′ = _k′(k))
+        isa(k′, Nothing) && (k′ = _k′(k))
 
         # check if already within range
         if (descending && (abs(k) ≤ ktol)) || (!descending && (abs(k′) ≤ ktol))
