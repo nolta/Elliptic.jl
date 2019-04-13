@@ -13,7 +13,7 @@ include("slatec.jl")
 
 function E(phi::Float64, m::Float64)
     if isnan(phi) || isnan(m) return NaN end
-    if m > 1. throw(DomainError()) end
+    if m < 0. || m > 1. throw(DomainError()) end
     if abs(phi) > pi/2
         phi2 = phi + pi/2
         return 2*fld(phi2,pi)*E(m) - _E(cos(mod(phi2,pi)), m)
@@ -75,7 +75,7 @@ F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
 
 function K(m::Float64)
     if isnan(m) return NaN end
-    if m < 0. || m > 1. throw(DomainError()) end
+    if m > 1. throw(DomainError()) end
     if m == 1. return Inf end
     drf,ierr = SLATEC.DRF(0., 1. - m, 1.)
     @assert ierr == 0
