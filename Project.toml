@@ -1,0 +1,18 @@
+name = "Elliptic"
+uuid = "b305315f-e792-5b7a-8f41-49f472929428"
+keywords = ["elliptic", "integral", "Jacobi", "special functions"]
+license = "MIT"
+desc = "Elliptic integrals and Jacobi elliptic special functions"
+author = ["Mike Nolta <mike@nolta.net>"]
+version = "0.5.0"
+
+[compat]
+julia = "1"
+
+[extras]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test", "SpecialFunctions", "DelimitedFiles"]
