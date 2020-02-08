@@ -13,7 +13,7 @@ include("slatec.jl")
 
 function E(phi::Float64, m::Float64)
     if isnan(phi) || isnan(m) return NaN end
-    if m < 0. || m > 1. throw(DomainError()) end
+    if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     if abs(phi) > pi/2
         phi2 = phi + pi/2
         return 2*fld(phi2,pi)*E(m) - _E(cos(mod(phi2,pi)), m)
@@ -43,7 +43,7 @@ returns `(K(m), E(m))` for scalar `0 ≤ m ≤ 1`
 """
 function ellipke(m::Float64)
     if isnan(m) return NaN, NaN end
-    if m < 0. || m > 1. throw(DomainError()) end
+    if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     if m == 1. return Inf, 1. end
     y = 1. - m
     drf,ierr1 = SLATEC.DRF(0., y, 1.)
@@ -68,7 +68,7 @@ end
 
 function F(phi::Float64, m::Float64)
     if isnan(phi) || isnan(m) return NaN end
-    if m < 0. || m > 1. throw(DomainError()) end
+    if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     if abs(phi) > pi/2
         # Abramowitz & Stegun (17.4.3)
         phi2 = phi + pi/2
@@ -80,7 +80,7 @@ F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
 
 function K(m::Float64)
     if isnan(m) return NaN end
-    if m > 1. throw(DomainError()) end
+    if m > 1. throw(DomainError(m, "argument m not <= 1")) end
     if m == 1. return Inf end
     drf,ierr = SLATEC.DRF(0., 1. - m, 1.)
     @assert ierr == 0
@@ -91,7 +91,7 @@ K(x::Real) = K(Float64(x))
 
 function Pi(n::Float64, phi::Float64, m::Float64)
     if isnan(n) || isnan(phi) || isnan(m) return NaN end
-    if m < 0. || m > 1. throw(DomainError()) end
+    if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     sinphi = sin(phi)
     sinphi2 = sinphi^2
     cosphi2 = 1. - sinphi2
