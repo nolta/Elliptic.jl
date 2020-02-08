@@ -4,7 +4,7 @@ keywords = ["elliptic", "integral", "Jacobi", "special functions"]
 license = "MIT"
 desc = "Elliptic integrals and Jacobi elliptic special functions"
 author = ["Mike Nolta <mike@nolta.net>"]
-version = "0.5.0"
+version = "1.0.0"
 
 [compat]
 julia = "1"
