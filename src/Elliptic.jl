@@ -43,7 +43,7 @@ returns `(K(m), E(m))` for scalar `0 ≤ m ≤ 1`
 """
 function ellipke(m::Float64)
     if isnan(m) return NaN, NaN end
-    if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
+    if m > 1. throw(DomainError(m, "argument m not <= 1")) end
     if m == 1. return Inf, 1. end
     y = 1. - m
     drf,ierr1 = SLATEC.DRF(0., y, 1.)
