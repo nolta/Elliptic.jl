@@ -42,8 +42,6 @@ E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
 returns `(K(m), E(m))` for scalar `0 ≤ m ≤ 1`
 """
 function ellipke(m::Float64)
-
-function ellipke(m::Float64)
     if isnan(m) return NaN, NaN end
     if m < 0. || m > 1. throw(DomainError()) end
     if m == 1. return Inf, 1. end
