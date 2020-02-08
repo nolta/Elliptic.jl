@@ -23,6 +23,19 @@ using DelimitedFiles: readdlm
     @test ellipke(NaN) === (NaN,NaN)
 end
 
+# test negative arguments
+@testset "Negative arguments" begin
+    for m in 1:10
+        e = E(m/(m + 1))*sqrt(m + 1)
+        k = K(m/(m + 1))/sqrt(m + 1)
+        @test E(-m) ≈ e
+        @test K(-m) ≈ k
+        k2,e2 = ellipke(-m)
+        @test e2 ≈ e
+        @test k2 ≈ k
+    end
+end
+
 #
 # K(m), E(m), ellipke(m), F(pi/2,m), E(pi/2,m)
 #
