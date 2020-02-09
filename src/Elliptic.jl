@@ -42,14 +42,19 @@ E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
 returns `(K(m), E(m))` for scalar `0 ≤ m ≤ 1`
 """
 function ellipke(m::Float64)
-    if isnan(m) return NaN, NaN end
-    if m > 1. throw(DomainError(m, "argument m not <= 1")) end
-    if m == 1. return Inf, 1. end
-    y = 1. - m
-    drf,ierr1 = SLATEC.DRF(0., y, 1.)
-    drd,ierr2 = SLATEC.DRD(0., y, 1.)
-    @assert ierr1 == 0 && ierr2 == 0
-    drf, drf - m*drd/3
+    if m < 1.
+        y = 1. - m
+        drf,ierr1 = SLATEC.DRF(0., y, 1.)
+        drd,ierr2 = SLATEC.DRD(0., y, 1.)
+        @assert ierr1 == 0 && ierr2 == 0
+        return drf, drf - m*drd/3
+    elseif m == 1.
+        return Inf, 1.
+    elseif isnan(m)
+        return NaN, NaN
+    else
+        throw(DomainError(m, "argument m not <= 1"))
+    end
 end
 ellipke(x::Real) = ellipke(Float64(x))
 
@@ -79,12 +84,17 @@ end
 F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
 
 function K(m::Float64)
-    if isnan(m) return NaN end
-    if m > 1. throw(DomainError(m, "argument m not <= 1")) end
-    if m == 1. return Inf end
-    drf,ierr = SLATEC.DRF(0., 1. - m, 1.)
-    @assert ierr == 0
-    drf
+    if m < 1.
+        drf,ierr = SLATEC.DRF(0., 1. - m, 1.)
+        @assert ierr == 0
+        return drf
+    elseif m == 1.
+        return Inf
+    elseif isnan(m)
+        return NaN
+    else
+        throw(DomainError(m, "argument m not <= 1"))
+    end
 end
 K(x::Float32) = Float32(K(Float64(x)))
 K(x::Real) = K(Float64(x))
