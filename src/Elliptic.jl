@@ -130,6 +130,6 @@ function ellipj(u::Float64, m::Float64, tol::Float64)
     s, c, d
 end
 ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
-ellipj(u::Real, m::Real) = ellipj(Float64(phi), Float64(m))
+ellipj(u::Real, m::Real) = ellipj(Float64(u), Float64(m))
 
 end # module
