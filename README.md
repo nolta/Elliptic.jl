@@ -76,6 +76,10 @@ also provided. `ellipj(u,m)` is equivalent to `sn(u,m), cn(u,m), dn(u,m)`,
 but faster if you want all three. Likewise, `ellipke(m)` is equivalent to
 `K(m), E(m)`, but faster if you want both.
 
+Additionally, you may also input arrays of the compatible size to calculate elliptic integrals 
+for multiple values together. Please check the documentation of `ellipke` and `ellipj` for details.
+Example usages are also available in `test/runtests.jl" (see the "MATLAB compatibility" testset).
+
 ```jlcon
 julia> import Elliptic
 
@@ -84,6 +88,17 @@ julia> k,e = Elliptic.ellipke(0.5)
 
 julia> sn,cn,dn = Elliptic.ellipj(0.672, 0.36)
 (0.6095196917919022,0.792770928653356,0.9307281387786907)
+
+julia> using Elliptic
+
+julia> ellipke([0, 0.3, 0.7, 1.0])
+([1.5707963267948968, 1.7138894481787914, 2.0753631352924686, Inf], 
+ [1.5707963267948968, 1.4453630644126656, 1.2416705679458224, 1.0])
+
+julia> ellipj([-1.5, 1.5], 0.23)
+([-0.9881951524605244, 0.9881951524605244], 
+ [0.15320032850330667, 0.15320032850330667], 
+ [0.8805669641488431, 0.8805669641488431])
 ```
 
 Installation
