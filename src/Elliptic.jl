@@ -36,11 +36,14 @@ function _E(sinphi::Float64, m::Float64)
 end
 E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
 
+"""
+    ellipke(M)
 
+Complete elliptic integrals of first and second kind. Each element of `M`, say `m`, should satisfy `m ≤ 1.0`.
+A tuple `(K, E)` is returned. If `M` is an array, then `K` and `E` share the same size with `M`.
 """
-`ellipke(m::Real)`
-returns `(K(m), E(m))` for scalar `0 ≤ m ≤ 1`
-"""
+function ellipke end
+
 function ellipke(m::Float64)
     if m < 1.
         y = 1. - m
@@ -57,6 +60,15 @@ function ellipke(m::Float64)
     end
 end
 ellipke(x::Real) = ellipke(Float64(x))
+
+function ellipke(M::AbstractArray{T}) where T <: Real
+    K = similar(M, Float64)
+    E = similar(M, Float64)
+    for i in eachindex(M)
+        @inbounds K[i], E[i] = ellipke(M[i])
+    end
+    return K, E
+end
 
 E(m::Float64) = ellipke(m)[2]
 E(x::Float32) = Float32(E(Float64(x)))
@@ -122,6 +134,18 @@ end
 Pi(n::Real, phi::Real, m::Real) = Pi(Float64(n), Float64(phi), Float64(m))
 Π = Pi
 
+"""
+    ellipj(U, M)
+
+Compute the Jacobi elliptic functions `SN`, `CN`, and `DN` evaluated for corresponding 
+elements of argument `U` and parameter `M`.
+Note that `M` can only take values in range `[0, 1]` (both ends closed).
+If both `U` and `M` are arrays, they must be the same size, and each element of the returned tuple `(SN, CN, DN)`
+also has the same size. If either `U` or `M` is an array, then the other (a scalar) is broadcasted, and 
+each element of the returned tuple `(SN, CN, DN)` has the same size as the array.
+"""
+function ellipj end
+
 function ellipj(u::Float64, m::Float64, tol::Float64)
     phi = Jacobi.am(u, m, tol)
     s = sin(phi)
@@ -132,4 +156,16 @@ end
 ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
 ellipj(u::Real, m::Real) = ellipj(Float64(u), Float64(m))
 
+function ellipj(U::AbstractArray{TU}, M::AbstractArray{TM}) where {TU <: Real,TM <: Real}
+    @assert size(U) == size(M) "U and M must be the same size"
+    SN = similar(U, Float64)
+    CN = similar(U, Float64)
+    DN = similar(U, Float64)
+    for i in eachindex(U)
+        @inbounds SN[i], CN[i], DN[i] = ellipj(U[i], M[i])
+    end
+    return SN, CN, DN
+end
+ellipj(U::AbstractArray{TU}, m::Real) where TU <: Real = ellipj(U, fill(Float64(m), size(U)))
+ellipj(u::Real, M::AbstractArray{TM}) where TM <: Real = ellipj(fill(Float64(u), size(M)), M)
 end # module
