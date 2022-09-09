@@ -11,7 +11,7 @@ export ellipj, ellipke
 include("jacobi.jl")
 include("slatec.jl")
 
-function E(phi::Float64, m::Float64)
+function E(phi, m)
     if isnan(phi) || isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     if abs(phi) > pi/2
@@ -20,7 +20,7 @@ function E(phi::Float64, m::Float64)
     end
     _E(sin(phi), m)
 end
-function _E(sinphi::Float64, m::Float64)
+function _E(sinphi, m)
     sinphi2 = sinphi^2
     cosphi2 = 1. - sinphi2
     y = 1. - m*sinphi2
@@ -34,14 +34,12 @@ function _E(sinphi::Float64, m::Float64)
     end
     NaN
 end
-E(phi::Real, m::Real) = E(Float64(phi), Float64(m))
-
 
 """
 `ellipke(m::Real)`
 returns `(K(m), E(m))` for scalar `0 ≤ m ≤ 1`
 """
-function ellipke(m::Float64)
+function ellipke(m)
     if m < 1.
         y = 1. - m
         drf,ierr1 = SLATEC.DRF(0., y, 1.)
@@ -56,14 +54,11 @@ function ellipke(m::Float64)
         throw(DomainError(m, "argument m not <= 1"))
     end
 end
-ellipke(x::Real) = ellipke(Float64(x))
 
 E(m::Float64) = ellipke(m)[2]
-E(x::Float32) = Float32(E(Float64(x)))
-E(x::Real) = E(Float64(x))
 
 # assumes 0 ≤ m ≤ 1
-function rawF(sinphi::Float64, m::Float64)
+function rawF(sinphi, m)
     if abs(sinphi) == 1. && m == 1. return sign(sinphi)*Inf end
     sinphi2 = sinphi^2
     drf,ierr = SLATEC.DRF(1. - sinphi2, 1. - m*sinphi2, 1.)
@@ -71,7 +66,7 @@ function rawF(sinphi::Float64, m::Float64)
     sinphi*drf
 end
 
-function F(phi::Float64, m::Float64)
+function F(phi, m)
     if isnan(phi) || isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     if abs(phi) > pi/2
@@ -81,9 +76,8 @@ function F(phi::Float64, m::Float64)
     end
     rawF(sin(phi), m)
 end
-F(phi::Real, m::Real) = F(Float64(phi), Float64(m))
 
-function K(m::Float64)
+function K(m)
     if m < 1.
         drf,ierr = SLATEC.DRF(0., 1. - m, 1.)
         @assert ierr == 0
@@ -96,10 +90,8 @@ function K(m::Float64)
         throw(DomainError(m, "argument m not <= 1"))
     end
 end
-K(x::Float32) = Float32(K(Float64(x)))
-K(x::Real) = K(Float64(x))
 
-function Pi(n::Float64, phi::Float64, m::Float64)
+function Pi(n, phi, m)
     if isnan(n) || isnan(phi) || isnan(m) return NaN end
     if m < 0. || m > 1. throw(DomainError(m, "argument m not in [0,1]")) end
     sinphi = sin(phi)
@@ -119,17 +111,15 @@ function Pi(n::Float64, phi::Float64, m::Float64)
     end
     NaN
 end
-Pi(n::Real, phi::Real, m::Real) = Pi(Float64(n), Float64(phi), Float64(m))
 Π = Pi
 
-function ellipj(u::Float64, m::Float64, tol::Float64)
+function ellipj(u, m, tol)
     phi = Jacobi.am(u, m, tol)
     s = sin(phi)
     c = cos(phi)
     d = sqrt(1. - m*s^2)
     s, c, d
 end
-ellipj(u::Float64, m::Float64) = ellipj(u, m, eps(Float64))
-ellipj(u::Real, m::Real) = ellipj(Float64(u), Float64(m))
+ellipj(u, m) = ellipj(u, m, eps(Float64))
 
 end # module
