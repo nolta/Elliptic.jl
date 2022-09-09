@@ -33,7 +33,7 @@ const D1MACH5 = log10(2.)
 #             Lawrence Livermore National Laboratory
 #             Livermore, CA  94550
 
-function DRF(X::Float64, Y::Float64, Z::Float64)
+function DRF(X, Y, Z)
 
     ERRTOL = (4.0*D1MACH3)^(1.0/6.0)
     LOLIM  = 5.0 * D1MACH1
@@ -112,7 +112,7 @@ end
 #             Lawrence Livermore National Laboratory
 #             Livermore, CA  94550
 
-function DRD(X::Float64, Y::Float64, Z::Float64)
+function DRD(X, Y, Z)
 
     ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
     LOLIM  = 2.0/(D1MACH2)^(2.0/3.0)
@@ -200,7 +200,7 @@ end
 #             Lawrence Livermore National Laboratory
 #             Livermore, CA  94550
 
-function DRC(X::Float64, Y::Float64)
+function DRC(X, Y)
 
     ERRTOL = (D1MACH3/16.0)^(1.0/6.0)
     LOLIM  = 5.0 * D1MACH1
@@ -266,7 +266,7 @@ end
 #             Lawrence Livermore National Laboratory
 #             Livermore, CA  94550
 
-function DRJ(X::Float64, Y::Float64, Z::Float64, P::Float64)
+function DRJ(X, Y, Z, P)
 
     ERRTOL = (D1MACH3/3.0)^(1.0/6.0)
     LOLIM  = (5.0 * D1MACH1)^(1.0/3.0)
