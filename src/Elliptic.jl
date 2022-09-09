@@ -55,7 +55,7 @@ function ellipke(m)
     end
 end
 
-E(m::Float64) = ellipke(m)[2]
+E(m) = ellipke(m)[2]
 
 # assumes 0 ≤ m ≤ 1
 function rawF(sinphi, m)

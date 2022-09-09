@@ -3,6 +3,8 @@ using SpecialFunctions: gamma
 using Elliptic
 using DelimitedFiles: readdlm
 
+include("autodiff.jl")
+
 @testset "NaNs" begin
     @test E(NaN) === NaN
     @test K(NaN) === NaN
