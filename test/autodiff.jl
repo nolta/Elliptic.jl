@@ -49,12 +49,5 @@ using SpecialFunctions
         @test Zygote.gradient(m -> E(ϕ, m), m)[1] ≈ (E(ϕ, m) - F(ϕ, m)) / 2m
         @test ForwardDiff.derivative(m -> E(ϕ, m), m) ≈ (E(ϕ, m) - F(ϕ, m)) / 2m
 
-        # 7. ∂n(Π(n, ϕ, m)) == inv(2 * (m-n) * (n-1)) * (E(ϕ, m) + (m - n)/n * F(ϕ, m) + (n^2 - m)/n * Elliptic.Pi(n, ϕ, m) - n * sqrt(1 - m * sin(ϕ)^2) * sin(2ϕ) / 2 / (1 - n * sin(ϕ)^2))
-        #@test Zygote.gradient(n -> Elliptic.Pi(n, ϕ, m), n)[1] ≈ inv(2 * (m-n) * (n-1)) * (E(ϕ, m) + (m - n)/n * F(ϕ, m) + (n^2 - m)/n * Elliptic.Pi(n, ϕ, m) - n * √(1 - m * sin(ϕ)^2) * sin(2ϕ) / 2 / (1 - n * sin(ϕ)^2))
-
-        # 7. ∂ϕ(Π(n, ϕ, m)) == 1 / (√(1 - m*sin(ϕ)^2) * (1 - n * sin(ϕ)^2))
-
-        # 8. ∂m(Π(ϕ, m)) == (E(ϕ, m) / (m - 1) + Π(n, ϕ, m) - m*sin(2ϕ) / (2 * (m-1) * √(1 - m * sin(ϕ)^2))) / (2 * (n-m))
-
     end
 end
