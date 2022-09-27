@@ -1,10 +1,10 @@
 name = "Elliptic"
-uuid = "b305315f-e792-5b7a-8f41-49f472929428"
+uuid = "0849f792-3ea3-11ed-3c0b-7b4bcacd782f"
 keywords = ["elliptic", "integral", "Jacobi", "special functions"]
 license = "MIT"
 desc = "Elliptic integrals and Jacobi elliptic special functions"
-author = ["Mike Nolta <mike@nolta.net>"]
-version = "1.0.1"
+author = ["Mike Nolta <mike@nolta.net> and contributors"]
+version = "1.0.2"
 
 [compat]
 julia = "1"
